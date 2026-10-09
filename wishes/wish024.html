@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>たんざく024 - 綴る星空</title>
+	<link rel="stylesheet" href="../css/style.css">
+	<style>
+		.wish-page {
+			width: min(960px, 90vw);
+			margin: 0 auto;
+			padding: 2rem 1rem 4rem;
+			position: relative;
+			z-index: 1;
+		}
+
+		.wish-breadcrumb {
+			margin-bottom: 1.2rem;
+			font-size: 0.9rem;
+			opacity: 0.8;
+		}
+
+		.wish-breadcrumb a {
+			color: #fff;
+			text-decoration: none;
+		}
+
+		.wish-header {
+			display: grid;
+			grid-template-columns: minmax(220px, 260px) 1fr;
+			gap: 1.5rem;
+			align-items: center;
+			background: rgba(255,255,255,0.04);
+			border: 1px solid rgba(255,255,255,0.12);
+			border-radius: 18px;
+			padding: 1.25rem;
+			box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+		}
+
+		.wish-image {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background: rgba(255,255,255,0.9);
+			border-radius: 12px;
+			padding: 0.5rem;
+		}
+
+		.wish-image img {
+			width: 100%;
+			max-width: 220px;
+			height: auto;
+			display: block;
+		}
+
+		.wish-summary h2 {
+			margin: 0 0 0.5rem;
+			font-size: clamp(1.8rem, 3vw, 2.8rem);
+		}
+
+		.wish-kicker {
+			margin: 0 0 0.75rem;
+			opacity: 0.85;
+			font-size: 0.95rem;
+		}
+
+		.wish-tags {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+			margin: 0 0 1rem;
+		}
+
+		.wish-tag {
+			display: inline-block;
+			padding: 0.28rem 0.7rem;
+			background: rgba(255,255,255,0.08);
+			border: 1px solid rgba(255,255,255,0.15);
+			border-radius: 999px;
+			font-size: 0.8rem;
+		}
+
+		.wish-summary p {
+			text-align: left;
+			line-height: 1.8;
+		}
+
+		.wish-detail {
+			margin-top: 1.5rem;
+			background: rgba(8, 17, 32, 0.45);
+			border: 1px solid rgba(255,255,255,0.12);
+			border-radius: 16px;
+			padding: 1.25rem;
+		}
+
+		.wish-detail h3 {
+			margin-top: 0;
+			font-size: 1.4rem;
+		}
+
+		.wish-detail p,
+		.wish-detail li {
+			text-align: left;
+			line-height: 1.8;
+			font-size: 1rem;
+		}
+
+		.wish-actions {
+			margin-top: 1.5rem;
+		}
+
+		.back-link {
+			display: inline-block;
+			padding: 0.7rem 1.1rem;
+			border-radius: 999px;
+			background: linear-gradient(135deg, #f9d976, #f0a6c8);
+			color: #201b2f;
+			text-decoration: none;
+			font-weight: 600;
+		}
+
+		@media (max-width: 700px) {
+			.wish-header {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h1 class="site-logo site-logo-static">
+  <a href="../index.html" aria-label="タイトルへ戻る">
+    <img class="site-logo-image" src="../images/titlelogo.png" alt="綴る星空">
+  </a>
+</h1>
+
+
+
+		<button class="menu-btn" id="js-btn" aria-label="メニュー">
+			<span class="icon-open">≡</span>
+			<span class="icon-close">×</span>
+		</button>
+
+		<nav class="nav-menu" id="js-nav">
+			<ul>
+				<li><a href="../index.html">Home</a></li>
+				<li><a href="../about.html">About</a></li>
+				<li><a href="../event.html">Event</a></li>
+				<li><a href="../wishes.html">Wishes</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<div class="stars" aria-hidden="true"></div>
+
+	<main class="content">
+		<article class="wish-page">
+			<a class="wish-list-back" href="../wishes.html" aria-label="願い事一覧へ戻る">←</a>
+			<p class="wish-breadcrumb">
+				<a href="../wishes.html">願い事一覧</a> / <span>たんざく024</span>
+			</p>
+
+			<section class="wish-header">
+				<div class="wish-image">
+					<img src="../images/health/tanzaku001.png" alt="たんざく024の画像">
+				</div>
+
+				<div class="wish-summary">
+					<h2>たんざく024</h2>
+					<p class="wish-kicker">カテゴリ: 健康 / 願い事</p>
+					<div class="wish-tags">
+						<span class="wish-tag">健康</span>
+						<span class="wish-tag">願い事</span>
+						<span class="wish-tag">夜</span>
+					</div>
+					<p>
+						願いのひとこと<br>
+						たんざく024 の願いを、星に託して届けます。
+					</p>
+					<p class="wish-rating-label">願いが叶ってほしい度合い</p>
+					<div class="wish-rating" role="img" aria-label="願いが叶ってほしい度: 4.5 / 5">
+						<span class="wish-rating-stars" aria-hidden="true">
+							<span class="wish-rating-star is-full">★</span>
+							<span class="wish-rating-star is-full">★</span>
+							<span class="wish-rating-star is-full">★</span>
+							<span class="wish-rating-star is-full">★</span>
+							<span class="wish-rating-star is-half">★</span>
+						</span>
+						<span class="wish-rating-value" aria-hidden="true">4.5 / 5</span>
+					</div>
+				</div>
+			</section>
+
+			<section class="wish-detail">
+				<h3>願いの詳細</h3>
+				<p>
+					このページは、願いを綴るための短冊として作成されています。<br>
+					たんざく024 の気持ちを、静かな夜空に向かって丁寧に書き残します。
+				</p>
+				<ul>
+					<li>小さな願いでも大切にしたい</li>
+					<li>今日を少しでも安心して過ごしたい</li>
+					<li>明日へ向かう力を受け取りたい</li>
+				</ul>
+			</section>
+
+			<div class="wish-actions">
+				<a class="back-link" href="../wishes.html">← 一覧へ戻る</a>
+			</div>
+		</article>
+	</main>
+
+	<script>
+		const stars = document.querySelector('.stars');
+		const starCount = 140;
+
+		for (let i = 0; i < starCount; i++) {
+			const star = document.createElement('span');
+			const size = (Math.random() * 3 + 1).toFixed(2) + 'px';
+			const left = (Math.random() * 100).toFixed(2) + '%';
+			const top = (Math.random() * 100).toFixed(2) + '%';
+			const opacity = (Math.random() * 0.9 + 0.1).toFixed(2);
+			const duration = (Math.random() * 3 + 2).toFixed(2) + 's';
+			const delay = (Math.random() * 5).toFixed(2) + 's';
+
+			star.className = 'star';
+			star.style.width = size;
+			star.style.height = size;
+			star.style.left = left;
+			star.style.top = top;
+			star.style.opacity = opacity;
+			star.style.animationDuration = duration;
+			star.style.animationDelay = delay;
+
+			stars.appendChild(star);
+		}
+	</script>
+</body>
+</html>
