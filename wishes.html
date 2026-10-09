@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Wishes - 綴る星空</title>
+	<link rel="stylesheet" href="css/style.css">
+	<style>
+		.wish-page {
+			position: relative;
+			width: min(1180px, 92vw);
+			margin: 2rem auto 4rem;
+			padding: 1.2rem 0 2rem;
+			background: transparent;
+			border: none;
+			border-radius: 0;
+			box-shadow: none;
+			color: #f0f5ff;
+			z-index: 1;
+		}
+
+		.wish-intro,
+		.tag-filters,
+		.wish-list {
+			position: relative;
+			z-index: 1;
+		}
+
+		.wish-intro {
+			margin-bottom: 1.2rem;
+			padding: 0;
+			text-align: left;
+		}
+
+		.wish-intro h2 {
+			margin: 0 0 0.3rem;
+			font-size: clamp(1.5rem, 2vw, 2.3rem);
+			color: #edf6ff;
+			letter-spacing: 0.04em;
+			font-weight: 600;
+		}
+
+		.wish-intro p {
+			margin: 0;
+			font-size: 0.96rem;
+			opacity: 0.75;
+		}
+
+		.filter-panel {
+			margin-bottom: 1.5rem;
+			padding: 1rem;
+			background: rgba(12, 23, 38, 0.42);
+			border: 1px solid rgba(255, 255, 255, 0.12);
+			border-radius: 10px;
+		}
+
+		.filter-heading {
+			margin: 0 0 0.55rem;
+			font-size: 0.85rem;
+			color: #d9e9fa;
+		}
+
+		.tag-filters {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.7rem;
+			margin-bottom: 1rem;
+		}
+
+		.tag-btn {
+			padding: 0.5rem 0.8rem;
+			background: rgba(255, 255, 255, 0.06);
+			border: 1px solid rgba(255, 255, 255, 0.22);
+			border-radius: 999px;
+			color: #eaf4ff;
+			cursor: pointer;
+			font-size: 0.9rem;
+			transition: all 0.2s ease;
+		}
+
+		.tag-btn.active,
+		.tag-btn:hover {
+			background: rgba(158, 216, 255, 0.2);
+			color: #f5fbff;
+			border-color: rgba(158, 216, 255, 0.48);
+		}
+
+		.attribute-filters {
+			display: grid;
+			grid-template-columns: repeat(4, minmax(130px, 1fr));
+			gap: 0.75rem;
+			align-items: end;
+		}
+
+		.filter-control {
+			display: grid;
+			gap: 0.35rem;
+			color: #d9e9fa;
+			font-size: 0.82rem;
+		}
+
+		.filter-control select,
+		.filter-control input {
+			width: 100%;
+			min-width: 0;
+			padding: 0.6rem 0.65rem;
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			border-radius: 6px;
+			background: rgba(5, 13, 25, 0.75);
+			color: #f0f5ff;
+			font: inherit;
+		}
+
+		.filter-control select:disabled {
+			opacity: 0.58;
+		}
+
+		.filter-summary {
+			margin: 0.85rem 0 0;
+			font-size: 0.85rem;
+			color: #cbd9e8;
+		}
+
+		.duplicate-tags {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.45rem;
+			align-items: center;
+			margin-top: 0.85rem;
+		}
+
+		.duplicate-tags-label {
+			margin-right: 0.2rem;
+			font-size: 0.82rem;
+			color: #cbd9e8;
+		}
+
+		.duplicate-tag-btn {
+			padding: 0.3rem 0.55rem;
+			border: 1px solid rgba(255, 255, 255, 0.16);
+			border-radius: 6px;
+			background: rgba(255, 255, 255, 0.05);
+			color: #eaf4ff;
+			cursor: pointer;
+			font: inherit;
+			font-size: 0.76rem;
+		}
+
+		.duplicate-tag-btn:hover {
+			background: rgba(158, 216, 255, 0.16);
+		}
+
+		.wish-list {
+			display: grid;
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			gap: 1.1rem;
+		}
+
+		.wish-card {
+			display: flex;
+			align-items: stretch;
+			position: relative;
+			background: rgba(12, 23, 38, 0.54);
+			border: 1px solid rgba(255, 255, 255, 0.12);
+			border-radius: 14px;
+			overflow: hidden;
+			text-decoration: none;
+			color: #edf5ff;
+			box-shadow: 0 10px 22px rgba(3, 6, 18, 0.12);
+			transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+		}
+
+		.wish-card:hover {
+			transform: translateY(-2px);
+			border-color: rgba(158, 216, 255, 0.45);
+			background: rgba(17, 31, 51, 0.65);
+		}
+
+		.wish-thumb {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex: 0 0 42%;
+			height: auto;
+			min-height: 150px;
+			background: rgba(255, 255, 255, 0.04);
+			border-right: 1px solid rgba(255,255,255,0.08);
+		}
+
+		.wish-thumb img {
+			padding: 0.5rem;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			background: rgba(255,255,255,0.05);
+		}
+
+		.wish-body {
+			flex: 1 1 58%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			padding: 0.9rem 0.9rem 1rem;
+			min-width: 0;
+		}
+
+		.wish-body h3 {
+			margin: 0 0 0.5rem;
+			font-size: 1.08rem;
+			font-weight: 600;
+			color: #f4f9ff;
+			line-height: 1.4;
+		}
+
+		.wish-meta {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.4rem;
+			margin-top: 0.6rem;
+		}
+
+		.wish-tag {
+			display: inline-block;
+			background: rgba(255,255,255,0.06);
+			border: 1px solid rgba(255,255,255,0.12);
+			border-radius: 999px;
+			padding: 0.22rem 0.52rem;
+			font-size: 0.72rem;
+			line-height: 1.5;
+			color: #dfefff;
+		}
+
+		@media (max-width: 900px) {
+			.wish-list {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+			}
+		}
+
+		@media (max-width: 560px) {
+			.attribute-filters {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+			}
+
+			.wish-list {
+				grid-template-columns: 1fr;
+			}
+
+			.wish-card {
+				flex-direction: column;
+			}
+
+			.wish-thumb {
+				flex-basis: auto;
+				min-height: 120px;
+				border-right: none;
+				border-bottom: 1px solid rgba(255,255,255,0.08);
+			}
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h1 class="site-logo site-logo-static">
+  <a href="index.html" aria-label="タイトルへ戻る">
+    <img class="site-logo-image" src="images/titlelogo.png" alt="綴る星空">
+  </a>
+</h1>
+
+
+
+		<button class="menu-btn" id="js-btn" aria-label="メニュー">
+			<span class="icon-open">≡</span>
+			<span class="icon-close">×</span>
+		</button>
+
+		<nav class="nav-menu" id="js-nav">
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="about.html">About</a></li>
+				<li><a href="event.html">Event</a></li>
+				<li><a href="wishes.html">Wishes</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<div class="stars" aria-hidden="true"></div>
+
+	<main class="content">
+		<div class="wish-page">
+			<div class="wish-intro">
+				<h2>願い事一覧</h2>
+				<p>カテゴリや属性、タグで願い事を絞り込めます。</p>
+			</div>
+
+			<section class="filter-panel" aria-label="願い事の絞り込み">
+				<h3 class="filter-heading">カテゴリ</h3>
+				<div id="tag-filters" class="tag-filters" aria-label="カテゴリ絞り込み"></div>
+				<div class="attribute-filters">
+					<label class="filter-control">星座
+						<select id="zodiac-filter" aria-label="星座で絞り込む"></select>
+					</label>
+					<label class="filter-control">年代
+						<select id="age-filter" aria-label="年代で絞り込む"></select>
+					</label>
+					<label class="filter-control">性別
+						<select id="gender-filter" aria-label="性別で絞り込む"></select>
+					</label>
+					<label class="filter-control">タグを検索
+						<input id="tag-search" type="search" placeholder="例: 健康" aria-label="タグを検索">
+					</label>
+				</div>
+				<p id="filter-summary" class="filter-summary" role="status" aria-live="polite"></p>
+				<div id="duplicate-tags" class="duplicate-tags" aria-label="複数の願い事に使われているタグ"></div>
+			</section>
+			<div id="wish-list" class="wish-list"></div>
+		</div>
+	</main>
+
+	<script>
+		// タグを追加・変更するときは、下の wishMetadata を編集してください。
+		const imageMap = {
+			1: 'images/health/tanzaku001.png',
+			2: 'images/dream/tanzaku002.png',
+			3: 'images/health/tanzaku003.png',
+			4: 'images/study/tanzaku004.png',
+			5: 'images/money/tanzaku005.png',
+			6: 'images/study/tanzaku006.png',
+			7: 'images/dream/tanzaku007.png',
+			8: 'images/hobby/tanzaku008.png',
+			10: 'images/work/tanzaku010.png',
+			11: 'images/love/tanzaku011.png',
+			12: 'images/love/tanzaku012.png',
+			13: 'images/dream/tanzaku013.png',
+			14: 'images/other/tanzaku014.png',
+			15: 'images/money/tanzaku015.png',
+			16: 'images/dream/tanzaku016.png',
+			17: 'images/other/tanzaku017.png',
+			18: 'images/health/tanzaku018.png',
+			19: 'images/study/tanzaku019.png',
+			21: 'images/dream/tanzaku021.png',
+			22: 'images/health/tanzaku022.png',
+			31: 'images/health/tanzaku031.png',
+			32: 'images/other/tanzaku032.png',
+			33: 'images/money/tanzaku033.png',
+			34: 'images/hobby/tanzaku034.png',
+			35: 'images/hobby/tanzaku035.png',
+			36: 'images/survey×/tanzaku036.png',
+			37: 'images/survey×/tanzaku037.png',
+			38: 'images/study/tanzaku038.png',
+			39: 'images/dream/tanzaku039.png',
+			40: 'images/other/tanzaku040.png',
+			41: 'images/survey×/tanzaku041.png',
+			42: 'images/love/tanzaku042.png',
+			50: 'images/dream/tanzaku050.png',
+			53: 'images/study/tanzaku053.png',
+			54: 'images/survey×/tanzaku054.png',
+			55: 'images/hobby/tanzaku055.png',
+			58: 'images/survey×/tanzaku058.png',
+			59: 'images/survey×/tanzaku059.png',
+			60: 'images/money/tanzaku060.png',
+			61: 'images/dream/tanzaku061.png',
+			62: 'images/study/tanzaku062.png',
+			67: 'images/survey×/tanzaku067.png',
+			68: 'images/dream/tanzaku068.png',
+			69: 'images/other/tanzaku069.png',
+			70: 'images/love/tanzaku070.png',
+			75: 'images/hobby/tanzaku075.png',
+			76: 'images/dream/tanzaku076.png',
+			77: 'images/health/tanzaku077.png',
+			78: 'images/other/tanzaku078.png',
+			79: 'images/other/tanzaku079.png',
+			80: 'images/study/tanzaku080.png',
+			81: 'images/survey×/tanzaku081.png',
+			82: 'images/survey×/tanzaku082.png',
+			83: 'images/health/tanzaku083.png',
+			84: 'images/study/tanzaku084.png',
+			86: 'images/survey×/tanzaku086.png',
+			87: 'images/survey×/tanzaku087.png',
+			88: 'images/health/tanzaku088.png',
+			89: 'images/health/tanzaku089.png',
+			90: 'images/dream/tanzaku090.png',
+			92: 'images/family/tanzaku092.png',
+			95: 'images/family/tanzaku095.png',
+			96: 'images/family/tanzaku096.png'
+		};
+
+		const categoryNames = ['健康', '夢', '家族', '趣味', '恋愛', 'お金', 'その他', '勉強', '仕事'];
+		const folderCategories = {
+			health: '健康', dream: '夢', family: '家族', hobby: '趣味',
+			love: '恋愛', money: 'お金', other: 'その他', study: '勉強',
+			work: '仕事', 'survey×': 'その他'
+		};
+
+		// 編集用: 番号ごとの情報を追加します。例: 3: { category: '健康', tags: ['睡眠'], zodiac: '牡牛座', ageGroup: '20代', gender: '女性' }
+		// category は上の9種類から選択。tags は自由に追加でき、空の属性は省略できます。
+		const wishMetadata = {
+			1: { category: '健康', tags: ['学生', '夜'], zodiac: '牡牛座', gender: '女性' },
+			2: { category: '夢', tags: ['学生', '夜'], zodiac: '蠍座', gender: '女性' },
+			3: { category: '健康', tags: ['学生', '朝'], zodiac: '蟹座', gender: '女性' },
+			4: { category: '勉強', tags: ['学生', '夜'], zodiac: '獅子座', gender: '女性' },
+		};
+
+		const wishData = Array.from({ length: 200 }, (_, index) => {
+			const number = index + 1;
+			const padded = String(number).padStart(3, '0');
+			const fileNumber = number < 10 ? `00${number}` : number < 100 ? `0${number}` : String(number);
+			const pageId = `wish${fileNumber}`;
+			const image = imageMap[number] || `images/health/tanzaku${fileNumber}.png`;
+			const folder = imageMap[number]?.split('/')[1];
+			const metadata = wishMetadata[number] || {};
+			const category = metadata.category || folderCategories[folder] || '未分類';
+			const tags = [category, ...(metadata.tags || []), metadata.zodiac, metadata.ageGroup, metadata.gender].filter(Boolean);
+
+			return {
+				id: pageId,
+				title: `たんざく${padded}`,
+				url: `wishes/${pageId}.html`,
+				category,
+				zodiac: metadata.zodiac || '',
+				ageGroup: metadata.ageGroup || '',
+				gender: metadata.gender || '',
+				tags,
+				image
+			};
+		});
+
+		const tagFilters = document.getElementById('tag-filters');
+		const wishList = document.getElementById('wish-list');
+		const zodiacFilter = document.getElementById('zodiac-filter');
+		const ageFilter = document.getElementById('age-filter');
+		const genderFilter = document.getElementById('gender-filter');
+		const tagSearch = document.getElementById('tag-search');
+		const filterSummary = document.getElementById('filter-summary');
+		const duplicateTags = document.getElementById('duplicate-tags');
+		let activeCategory = 'すべて';
+
+		function populateSelect(select, key, label) {
+			const values = [...new Set(wishData.map((item) => item[key]).filter(Boolean))].sort();
+			select.innerHTML = '';
+			const allOption = document.createElement('option');
+			allOption.value = '';
+			allOption.textContent = values.length ? `${label}すべて` : `${label}未登録`;
+			select.appendChild(allOption);
+			values.forEach((value) => {
+				const option = document.createElement('option');
+				option.value = value;
+				option.textContent = value;
+				select.appendChild(option);
+			});
+			select.disabled = values.length === 0;
+		}
+
+		function renderFilters() {
+			tagFilters.innerHTML = '';
+			['すべて', ...categoryNames, '未分類'].forEach((category) => {
+				const button = document.createElement('button');
+				button.type = 'button';
+				button.className = 'tag-btn' + (category === activeCategory ? ' active' : '');
+				button.textContent = category;
+				button.addEventListener('click', () => {
+					activeCategory = category;
+					renderFilters();
+					renderList();
+				});
+				tagFilters.appendChild(button);
+			});
+		}
+
+		function renderDuplicateTags() {
+			const counts = new Map();
+			wishData.forEach((item) => {
+				new Set(item.tags).forEach((tag) => counts.set(tag, (counts.get(tag) || 0) + 1));
+			});
+			const repeated = [...counts.entries()].filter(([, count]) => count > 1);
+			duplicateTags.innerHTML = '<span class="duplicate-tags-label">重複タグ:</span>';
+			repeated.forEach(([tag, count]) => {
+				const button = document.createElement('button');
+				button.type = 'button';
+				button.className = 'duplicate-tag-btn';
+				button.textContent = `${tag} (${count})`;
+				button.setAttribute('aria-label', `タグ ${tag} を持つ ${count} 件を表示`);
+				button.addEventListener('click', () => {
+					tagSearch.value = tag;
+					activeCategory = 'すべて';
+					renderFilters();
+					renderList();
+				});
+				duplicateTags.appendChild(button);
+			});
+		}
+
+		function renderList() {
+			const query = tagSearch.value.trim().toLocaleLowerCase();
+			const filtered = wishData.filter((item) => {
+				const matchesCategory = activeCategory === 'すべて' || item.category === activeCategory;
+				const matchesZodiac = !zodiacFilter.value || item.zodiac === zodiacFilter.value;
+				const matchesAge = !ageFilter.value || item.ageGroup === ageFilter.value;
+				const matchesGender = !genderFilter.value || item.gender === genderFilter.value;
+				const searchable = item.tags.join(' ').toLocaleLowerCase();
+				return matchesCategory && matchesZodiac && matchesAge && matchesGender && (!query || searchable.includes(query));
+			});
+
+			wishList.innerHTML = '';
+			filterSummary.textContent = `${filtered.length}件 / ${wishData.length}件`;
+
+			filtered.forEach((item) => {
+				const card = document.createElement('a');
+				card.href = item.url;
+				card.className = 'wish-card';
+
+				const thumb = document.createElement('div');
+				thumb.className = 'wish-thumb';
+				const thumbImg = document.createElement('img');
+				thumbImg.src = item.image;
+				thumbImg.alt = item.title;
+				thumb.appendChild(thumbImg);
+
+				const body = document.createElement('div');
+				body.className = 'wish-body';
+
+				const title = document.createElement('h3');
+				title.textContent = item.title;
+
+				const meta = document.createElement('div');
+				meta.className = 'wish-meta';
+
+				item.tags.forEach((tag) => {
+					const chip = document.createElement('span');
+					chip.className = 'wish-tag';
+					chip.textContent = tag;
+					meta.appendChild(chip);
+				});
+
+				body.appendChild(title);
+				body.appendChild(meta);
+				card.appendChild(thumb);
+				card.appendChild(body);
+				wishList.appendChild(card);
+			});
+		}
+
+		populateSelect(zodiacFilter, 'zodiac', '星座');
+		populateSelect(ageFilter, 'ageGroup', '年代');
+		populateSelect(genderFilter, 'gender', '性別');
+		[zodiacFilter, ageFilter, genderFilter].forEach((select) => select.addEventListener('change', renderList));
+		tagSearch.addEventListener('input', renderList);
+		renderFilters();
+		renderDuplicateTags();
+		renderList();
+	</script>
+
+	<script src="javascript_menu/script.js"></script>
+</body>
+</html>
