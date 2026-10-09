@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>綴る星空</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1 class="site-logo site-logo-static">
+  <a href="index.html" aria-label="タイトルへ戻る">
+    <img class="site-logo-image" src="images/titlelogo.png" alt="綴る星空">
+  </a>
+</h1>
+
+
+
+        <button class="menu-btn" id="js-btn" aria-label="メニュー">
+            <span class="icon-open">≡</span>
+            <span class="icon-close">×</span>
+        </button>
+
+        <nav class="nav-menu" id="js-nav">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="event.html">Event</a></li>
+                <li><a href="wishes.html">Wishes</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="intro-screen">
+        <div class="iris-opening" aria-hidden="true">
+            <svg class="iris-svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                    <mask id="iris-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="1000">
+                        <rect width="1000" height="1000" fill="white"></rect>
+                        <path class="iris-star-cutout" fill="black" d="M500 120 C515 120 525 132 531 149 L585 335 C590 351 605 360 622 360 L815 360 C850 360 865 405 836 425 L680 538 C666 548 660 565 665 582 L725 760 C736 794 697 817 670 797 L520 686 C508 677 492 677 480 686 L330 797 C303 817 264 794 275 760 L335 582 C340 565 334 548 320 538 L164 425 C135 405 150 360 185 360 L378 360 C395 360 410 351 415 335 L469 149 C475 132 485 120 500 120 Z"></path>
+                    </mask>
+                </defs>
+                <rect width="1000" height="1000" fill="#fff" mask="url(#iris-mask)"></rect>
+            </svg>
+            <span class="shooting-star"></span>
+        </div>
+        <img class="intro-logo-image" src="images/titlelogo.png" alt="">
+        <img class="intro-cloud intro-cloud-left" src="images/cloud1.png" alt="">
+        <img class="intro-cloud intro-cloud-left-secondary" src="images/cloud2.png" alt="">
+        <img class="intro-cloud intro-cloud-right" src="images/cloud1.png" alt="">
+    </section>
+
+    <div class="stars" aria-hidden="true"></div>
+
+    <main class="content index-content">
+        <p class="index-tagline" aria-label="願いを、夜空へ。">
+            <span aria-hidden="true" style="--char-index: 0;">願</span>
+            <span aria-hidden="true" style="--char-index: 1;">い</span>
+            <span aria-hidden="true" style="--char-index: 2;">を</span>
+            <span aria-hidden="true" style="--char-index: 3;">、</span>
+            <span aria-hidden="true" style="--char-index: 4;">夜</span>
+            <span aria-hidden="true" style="--char-index: 5;">空</span>
+            <span aria-hidden="true" style="--char-index: 6;">へ</span>
+            <span aria-hidden="true" style="--char-index: 7;">。</span>
+        </p>
+        <h1>一人ひとりの願いを七夕の短冊によって手書きの文化を残していく研究</h1>
+        <p>VSCodeを使って初めてのページを作成しています。</p>
+        <a class="index-wishes-link" href="wishes.html">願いの一覧を見る</a>
+        <section class="index-text-area" aria-label="文章"></section>
+    </main>
+
+    <script src="javascript_menu/script.js"></script>
+</body>
+</html>
