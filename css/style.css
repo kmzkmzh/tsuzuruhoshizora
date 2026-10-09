@@ -1,0 +1,616 @@
+/* ここにCSSを書きます */
+
+/* ========================================
+   1. 全体設定
+======================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #9ed8ff transparent;
+}
+
+html::-webkit-scrollbar {
+    width: 10px;
+}
+
+html::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+    min-height: 54px;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: linear-gradient(to bottom, #ffffff 0%, #bce5ff 28%, #65bdf5 100%);
+    background-clip: padding-box;
+    box-shadow: 0 0 8px #9ed8ff, 0 0 16px rgba(101, 189, 245, 0.8);
+}
+
+html::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #ffffff 0%, #d7f2ff 28%, #82cdf8 100%);
+    background-clip: padding-box;
+}
+
+body {
+    position: relative;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+
+    /* 夜空のグラデーション背景 */
+    background: linear-gradient(
+        to bottom,
+        #030712 0%,
+        #081321 25%,
+        #12305B 70%,
+        #244C83 100%
+    );
+
+    color: #ffffff;
+    font-family: "Zen Old Mincho", serif;
+}
+
+/* ========================================
+   2. 星空背景
+======================================== */
+
+/* 星空全体のレイヤー */
+
+.stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+
+    pointer-events: none;
+}
+
+/* 背景動画 */
+.bg-video{
+    position: absolute;
+    left: 50%;
+    /* topはスクリプトで制御 */
+    width: 140%;
+    height: auto;
+    transform-origin: center top;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.45;
+    filter: saturate(0.9) contrast(1.05);
+}
+
+/* JavaScriptで生成される星 */
+
+.star {
+    position: absolute;
+    display: block;
+    z-index: 1;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.95);
+
+    box-shadow:
+        0 0 8px rgba(255, 255, 255, 0.8),
+        0 0 15px rgba(255, 255, 255, 0.5);
+
+    animation: twinkle ease-in-out infinite alternate;
+}
+
+/* 星のキラキラアニメーション */
+
+@keyframes twinkle {
+    0% {
+        transform: scale(0.7);
+        opacity: 0.2;
+    }
+
+    50% {
+        transform: scale(1.3);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0.9);
+        opacity: 0.6;
+    }
+}
+
+/* ========================================
+   3. TOPページのコンテンツ
+======================================== */
+
+.content {
+    position: relative;
+    z-index: 1;
+
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 2rem;
+}
+
+.index-content {
+    opacity: 0;
+    transform: translate(-24px, -14px);
+    filter: blur(4px);
+    transition: opacity 1.4s ease, transform 1.4s ease, filter 1.4s ease;
+}
+
+.index-content.content-visible {
+    opacity: 1;
+    transform: translate(0, 0);
+    filter: blur(0);
+}
+
+.index-wishes-link {
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid rgba(158, 216, 255, 0.65);
+    border-radius: 999px;
+    background: rgba(158, 216, 255, 0.12);
+    color: #f0f7ff;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.index-wishes-link:hover {
+    border-color: #bce5ff;
+    background: rgba(158, 216, 255, 0.24);
+}
+
+.index-wishes-link:focus-visible {
+    outline: 2px solid #bce5ff;
+    outline-offset: 3px;
+}
+
+.index-tagline {
+    position: relative;
+    top: -3rem;
+    margin-bottom: 1rem;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 600;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+}
+
+.index-tagline span {
+    display: inline-block;
+    opacity: 0;
+    filter: blur(5px);
+    transform: translate(-18px, -18px);
+}
+
+.index-content.content-visible .index-tagline span {
+    animation: tagline-character-in 0.8s ease forwards;
+    animation-delay: calc(var(--char-index) * 0.12s);
+}
+
+@keyframes tagline-character-in {
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translate(0, 0);
+    }
+}
+
+.index-text-area {
+    width: min(760px, 90vw);
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.index-text-area p {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* メインタイトル */
+
+h1 {
+    max-width: 1200px;
+
+    margin: 0 0 1rem;
+    padding-top: 0;
+
+    text-align: center;
+}
+
+/* 説明文 */
+
+p {
+    margin: 0;
+
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+/* javascriptハンバーガーメニュー */
+header {
+  position: relative;
+}
+
+header h1 {
+    margin: 0;
+    padding: 10px;
+    text-align: left;
+    font-size: 1.5rem;
+}
+
+.site-logo {
+    width: 180px;
+    height: 58px;
+}
+
+.site-logo-image {
+    display: block;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 210px;
+    height: auto;
+    transform: none;
+    object-fit: contain;
+    object-position: left center;
+    z-index: 20;
+}
+
+.wish-list-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 21;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 50%;
+    background: rgba(5, 13, 25, 0.82);
+    color: #f0f5ff;
+    font-family: sans-serif;
+    font-size: 1.5rem;
+    line-height: 1;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.wish-list-back:hover {
+    transform: translateX(-2px);
+    border-color: rgba(158, 216, 255, 0.7);
+    background: rgba(23, 47, 73, 0.94);
+}
+
+.wish-list-back:focus-visible {
+    outline: 2px solid #9ed8ff;
+    outline-offset: 3px;
+}
+
+.wish-rating-label {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    opacity: 0.85;
+    text-align: left;
+}
+
+.wish-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.25rem;
+}
+
+.wish-rating-stars {
+    display: inline-flex;
+    gap: 0.08em;
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.wish-rating-star {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.wish-rating-star.is-full {
+    color: #ffd76a;
+}
+
+.wish-rating-star.is-half {
+    background: linear-gradient(90deg, #ffd76a 50%, rgba(255, 255, 255, 0.3) 50%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+.wish-rating-value {
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+.intro-screen {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    height: 100vh;
+    background: transparent;
+    perspective: 1000px;
+    overflow: hidden;
+}
+
+.iris-opening {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    overflow: hidden;
+    pointer-events: none;
+    background: transparent;
+}
+
+.iris-opening .iris-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+}
+
+
+.iris-star-cutout {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0.01);
+    transition: transform 0.8s ease-out;
+}
+
+.intro-screen.iris-peek .iris-star-cutout {
+    transform: scale(0.35);
+}
+
+.intro-screen.iris-open .iris-star-cutout {
+    transform: scale(5);
+    transition-duration: 2.4s;
+}
+
+.shooting-star {
+    position: absolute;
+    top: 12%;
+    left: 118%;
+    width: 40vw;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #9ed8ff, #fff 18%, rgba(158, 216, 255, 0.35) 55%, transparent);
+    box-shadow: 0 0 10px #fff, 0 0 24px #7ac8ff;
+    transform: rotate(-22deg);
+    z-index: 5;
+    animation: shooting-star-cross 1.8s ease-out forwards;
+}
+
+.shooting-star::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 12px 4px #bce5ff;
+    transform: translateY(-50%);
+}
+
+@keyframes shooting-star-cross {
+    from {
+        transform: translate(0, 0) rotate(-22deg);
+        opacity: 0;
+    }
+
+    18% {
+        opacity: 1;
+    }
+
+    68% {
+        opacity: 1;
+    }
+
+    to {
+        transform: translate(-145vw, 72vh) rotate(-22deg);
+        opacity: 0;
+    }
+}
+
+.intro-logo-image {
+    position: absolute;
+    top: 43%;
+    left: 50%;
+    width: min(76vw, 760px);
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: contain;
+    z-index: 2;
+    opacity: 1;
+    transition: opacity 1.8s ease;
+}
+
+.intro-screen.title-visible .intro-logo-image {
+    opacity: 1;
+}
+
+.intro-screen.title-hidden .intro-logo-image {
+    opacity: 0;
+}
+
+.intro-cloud {
+    position: absolute;
+    bottom: 0;
+    width: min(42vw, 520px);
+    height: auto;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.intro-cloud-left {
+    left: -14%;
+    bottom: 30px;
+    width: min(36vw, 440px);
+    animation: cloud-drift-left 12s ease-in-out infinite alternate;
+}
+
+.intro-cloud-left-secondary {
+    left: -4%;
+    bottom: -18px;
+    width: min(42vw, 520px);
+    z-index: 1;
+    animation: cloud-drift-left-secondary 14s ease-in-out infinite alternate;
+}
+
+.intro-cloud-right {
+    right: -10%;
+    animation: cloud-drift-right 15s ease-in-out infinite alternate;
+}
+
+@keyframes cloud-drift-left-secondary {
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(20px, -10px);
+    }
+}
+
+@keyframes cloud-drift-left {
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(28px, -12px);
+    }
+}
+
+@keyframes cloud-drift-right {
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(-24px, -16px);
+    }
+}
+
+.site-logo-static .site-logo-image {
+    left: 10px;
+    width: 180px;
+    transform: none;
+}
+
+#js-btn {
+  cursor: pointer;
+    position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 100;
+  width: 40px;
+  height: 40px;
+    border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 2px;
+  background: transparent;
+  font-size: 2rem;
+  line-height: 1;
+  padding: 0;
+}
+
+/*位置調整*/
+#js-btn span {
+  position: relative;
+  top: -2px;
+  left: 0;
+}
+.icon-close {
+    display: none;
+    color: #fff;
+    font-size: 1.4rem;
+}
+
+#js-btn.open .icon-open {
+    display: none;
+}
+
+#js-btn.open .icon-close {
+    display: inline;
+}
+
+/* 三本線 */
+.icon-open {
+    display: inline-block;
+    width: 18px;
+    height: 2px;
+    background: #ffffff;
+    position: relative;
+    vertical-align: middle;
+    box-shadow: 0 -6px 0 #ffffff, 0 6px 0 #fff;
+    color: transparent;
+}
+
+/* ナビゲーションメニュー（ハンバーガー） */
+.nav-menu {
+    position: fixed;
+    top: 0;
+    right: -280px;
+    width: 260px;
+    height: 100vh;
+    background: rgba(203, 204, 247, 0.4);
+    z-index: 90;
+    padding: 3rem 1rem;
+    box-shadow:  rgba(203, 204, 247, 0.4);
+    transition: right 0.28s ease;
+}
+
+.nav-menu.open {
+    right: 0;
+}
+.nav-menu {
+    background: rgba(2,12,30,0.45);
+    box-shadow: -6px 0 20px rgba(0,0,0,0.4);
+    transition: right 0.28s ease, background 0.22s ease;
+}
+
+.nav-menu.open {
+    background: rgba(2,8,20,0.92);
+}
+
+.nav-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-menu li {
+    margin: 0.8rem 0;
+}
+
+.nav-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+/* メニューはコンテンツより前に出す */
+.content {
+    z-index: 1;
+}
