@@ -1,0 +1,245 @@
+
+		.wish-page {
+			width: min(960px, 90vw);
+			margin: 0 auto;
+			padding: 2rem 1rem 4rem;
+			position: relative;
+			z-index: 1;
+		}
+
+		.wish-breadcrumb {
+			margin-bottom: 1.2rem;
+			font-size: 0.9rem;
+			opacity: 0.8;
+		}
+
+		.wish-breadcrumb a {
+			color: #fff;
+			text-decoration: none;
+		}
+
+		.wish-header {
+			display: grid;
+			grid-template-columns: minmax(220px, 260px) 1fr;
+			gap: 1.5rem;
+			align-items: start;
+			background: linear-gradient(
+				90deg,
+				rgba(var(--wish-header-rgb), 0.76) 0 32%,
+				rgba(var(--wish-header-rgb), 0.24) 32% 100%
+			);
+			border: 1px solid rgba(255,255,255,0.12);
+			border-radius: 18px;
+			padding: 1.25rem;
+			box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+		}
+
+		.wish-header--dream {
+			--wish-header-rgb: 178, 140, 255;
+		}
+
+		.wish-header--family {
+			--wish-header-rgb: 255, 114, 114;
+		}
+
+		.wish-header--friend {
+			--wish-header-rgb: 255, 174, 92;
+		}
+
+		.wish-header--health {
+			--wish-header-rgb: 183, 227, 107;
+		}
+
+		.wish-header--hobby {
+			--wish-header-rgb: 255, 223, 112;
+		}
+
+		.wish-header--love {
+			--wish-header-rgb: 255, 145, 200;
+		}
+
+		.wish-header--money {
+			--wish-header-rgb: 255, 255, 255;
+		}
+
+		.wish-header--survey {
+			--wish-header-rgb: 150, 155, 165;
+		}
+
+		.wish-header--other {
+			--wish-header-rgb: 111, 217, 245;
+		}
+
+		.wish-header--study {
+			--wish-header-rgb: 101, 214, 165;
+		}
+
+		.wish-header--work {
+			--wish-header-rgb: 114, 168, 255;
+		}
+
+		.wish-image {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			border-radius: 12px;
+			padding: 0.5rem;
+		}
+
+		.wish-image[hidden] {
+			display: none;
+		}
+
+		.wish-image img {
+			width: 100%;
+			max-width: 220px;
+			height: auto;
+			display: block;
+		}
+
+		.wish-summary h2 {
+			margin: 0 0 0.5rem;
+			font-size: clamp(1.8rem, 3vw, 2.8rem);
+			line-height: 1.5;
+		}
+
+		.wish-kicker {
+			margin: 0 0 0.75rem;
+			opacity: 0.85;
+			font-size: 0.95rem;
+		}
+
+		.wish-tags {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+			margin: 0 0 1rem;
+		}
+
+		.wish-tag {
+			display: inline-block;
+			padding: 0.28rem 0.7rem;
+			background: rgba(255,255,255,0.08);
+			border: 1px solid rgba(255,255,255,0.15);
+			border-radius: 999px;
+			font-size: 0.8rem;
+		}
+
+		.wish-summary p {
+			margin: 0;
+			text-align: left;
+			line-height: 2;
+		}
+
+		.wish-summary,
+		.wish-detail {
+			font-family: inherit;
+		}
+
+		.wish-summary {
+			line-height: 2;
+			align-self: center;
+		}
+
+		.wish-summary > p:not(.wish-shared-label):not(.wish-field-label):not(.wish-shared-with) {
+			font-size: 1.17rem;
+		}
+
+		.wish-slide-in {
+			animation: wish-slide-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+		}
+
+		@keyframes wish-slide-in {
+			from {
+				opacity: 0;
+				transform: translateX(-1.25rem);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateX(0);
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.wish-slide-in {
+				animation: none;
+			}
+		}
+
+		.wish-summary > p:first-child {
+			margin-top: 0;
+		}
+
+		.wish-summary > .wish-shared-label {
+			margin: 2.2rem 0 0.5rem;
+			font-size: 0.9rem;
+			font-weight: 600;
+			line-height: 2;
+		}
+
+		.wish-shared-with {
+			margin: 0 0 0.4rem;
+			font-size: 1.17rem;
+			line-height: 2;
+		}
+
+		.wish-summary h3 {
+			margin: 0 0 0.4rem;
+			font-size: 1.17rem;
+			line-height: 2;
+		}
+
+		.wish-field-label {
+			margin: 0 0 0.25rem;
+			font-size: 0.9rem;
+			font-weight: 600;
+			line-height: 2;
+		}
+
+		.wish-detail {
+			margin-top: 1.5rem;
+			background: rgba(8, 17, 32, 0.45);
+			border: 1px solid rgba(255,255,255,0.12);
+			border-radius: 16px;
+			padding: 1.25rem;
+		}
+
+		.wish-detail h3 {
+			margin: 0 0 0.75rem;
+			font-size: 1.4rem;
+			line-height: 1.5;
+		}
+
+		.wish-detail p,
+		.wish-detail li {
+			text-align: left;
+			line-height: 1.8;
+			font-size: 1rem;
+		}
+
+		.wish-actions {
+			margin-top: 1.5rem;
+		}
+
+		.back-link {
+			display: inline-block;
+			padding: 0.7rem 1.1rem;
+			border-radius: 999px;
+			background: linear-gradient(135deg, #f9d976, #f0a6c8);
+			color: #201b2f;
+			text-decoration: none;
+			font-weight: 600;
+		}
+
+		@media (max-width: 700px) {
+			.wish-header {
+				grid-template-columns: 1fr;
+				background: linear-gradient(
+					180deg,
+					rgba(var(--wish-header-rgb), 0.76) 0 240px,
+					rgba(var(--wish-header-rgb), 0.24) 240px 100%
+				);
+			}
+		}
+	

@@ -193,6 +193,15 @@ body {
     transform: translate(-18px, -18px);
 }
 
+.index-tagline span:nth-child(1) { --char-index: 0; }
+.index-tagline span:nth-child(2) { --char-index: 1; }
+.index-tagline span:nth-child(3) { --char-index: 2; }
+.index-tagline span:nth-child(4) { --char-index: 3; }
+.index-tagline span:nth-child(5) { --char-index: 4; }
+.index-tagline span:nth-child(6) { --char-index: 5; }
+.index-tagline span:nth-child(7) { --char-index: 6; }
+.index-tagline span:nth-child(8) { --char-index: 7; }
+
 .index-content.content-visible .index-tagline span {
     animation: tagline-character-in 0.8s ease forwards;
     animation-delay: calc(var(--char-index) * 0.12s);
@@ -271,7 +280,7 @@ header h1 {
 .wish-list-back {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 200px;
     z-index: 21;
     display: grid;
     place-items: center;
