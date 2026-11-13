@@ -5,258 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Wishes - 綴る星空</title>
 	<link rel="stylesheet" href="css/style.css">
-	<style>
-		.wish-page {
-			position: relative;
-			width: min(1180px, 92vw);
-			margin: 2rem auto 4rem;
-			padding: 1.2rem 0 2rem;
-			background: transparent;
-			border: none;
-			border-radius: 0;
-			box-shadow: none;
-			color: #f0f5ff;
-			z-index: 1;
-		}
-
-		.wish-intro,
-		.tag-filters,
-		.wish-list {
-			position: relative;
-			z-index: 1;
-		}
-
-		.wish-intro {
-			margin-bottom: 1.2rem;
-			padding: 0;
-			text-align: left;
-		}
-
-		.wish-intro h2 {
-			margin: 0 0 0.3rem;
-			font-size: clamp(1.5rem, 2vw, 2.3rem);
-			color: #edf6ff;
-			letter-spacing: 0.04em;
-			font-weight: 600;
-		}
-
-		.wish-intro p {
-			margin: 0;
-			font-size: 0.96rem;
-			opacity: 0.75;
-		}
-
-		.filter-panel {
-			margin-bottom: 1.5rem;
-			padding: 1rem;
-			background: rgba(12, 23, 38, 0.42);
-			border: 1px solid rgba(255, 255, 255, 0.12);
-			border-radius: 10px;
-		}
-
-		.filter-heading {
-			margin: 0 0 0.55rem;
-			font-size: 0.85rem;
-			color: #d9e9fa;
-		}
-
-		.tag-filters {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 0.7rem;
-			margin-bottom: 1rem;
-		}
-
-		.tag-btn {
-			padding: 0.5rem 0.8rem;
-			background: rgba(255, 255, 255, 0.06);
-			border: 1px solid rgba(255, 255, 255, 0.22);
-			border-radius: 999px;
-			color: #eaf4ff;
-			cursor: pointer;
-			font-size: 0.9rem;
-			transition: all 0.2s ease;
-		}
-
-		.tag-btn.active,
-		.tag-btn:hover {
-			background: rgba(158, 216, 255, 0.2);
-			color: #f5fbff;
-			border-color: rgba(158, 216, 255, 0.48);
-		}
-
-		.attribute-filters {
-			display: grid;
-			grid-template-columns: repeat(4, minmax(130px, 1fr));
-			gap: 0.75rem;
-			align-items: end;
-		}
-
-		.filter-control {
-			display: grid;
-			gap: 0.35rem;
-			color: #d9e9fa;
-			font-size: 0.82rem;
-		}
-
-		.filter-control select,
-		.filter-control input {
-			width: 100%;
-			min-width: 0;
-			padding: 0.6rem 0.65rem;
-			border: 1px solid rgba(255, 255, 255, 0.2);
-			border-radius: 6px;
-			background: rgba(5, 13, 25, 0.75);
-			color: #f0f5ff;
-			font: inherit;
-		}
-
-		.filter-control select:disabled {
-			opacity: 0.58;
-		}
-
-		.filter-summary {
-			margin: 0.85rem 0 0;
-			font-size: 0.85rem;
-			color: #cbd9e8;
-		}
-
-		.duplicate-tags {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 0.45rem;
-			align-items: center;
-			margin-top: 0.85rem;
-		}
-
-		.duplicate-tags-label {
-			margin-right: 0.2rem;
-			font-size: 0.82rem;
-			color: #cbd9e8;
-		}
-
-		.duplicate-tag-btn {
-			padding: 0.3rem 0.55rem;
-			border: 1px solid rgba(255, 255, 255, 0.16);
-			border-radius: 6px;
-			background: rgba(255, 255, 255, 0.05);
-			color: #eaf4ff;
-			cursor: pointer;
-			font: inherit;
-			font-size: 0.76rem;
-		}
-
-		.duplicate-tag-btn:hover {
-			background: rgba(158, 216, 255, 0.16);
-		}
-
-		.wish-list {
-			display: grid;
-			grid-template-columns: repeat(4, minmax(0, 1fr));
-			gap: 1.1rem;
-		}
-
-		.wish-card {
-			display: flex;
-			align-items: stretch;
-			position: relative;
-			background: rgba(12, 23, 38, 0.54);
-			border: 1px solid rgba(255, 255, 255, 0.12);
-			border-radius: 14px;
-			overflow: hidden;
-			text-decoration: none;
-			color: #edf5ff;
-			box-shadow: 0 10px 22px rgba(3, 6, 18, 0.12);
-			transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-		}
-
-		.wish-card:hover {
-			transform: translateY(-2px);
-			border-color: rgba(158, 216, 255, 0.45);
-			background: rgba(17, 31, 51, 0.65);
-		}
-
-		.wish-thumb {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			flex: 0 0 42%;
-			height: auto;
-			min-height: 150px;
-			background: rgba(255, 255, 255, 0.04);
-			border-right: 1px solid rgba(255,255,255,0.08);
-		}
-
-		.wish-thumb img {
-			padding: 0.5rem;
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			background: rgba(255,255,255,0.05);
-		}
-
-		.wish-body {
-			flex: 1 1 58%;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			padding: 0.9rem 0.9rem 1rem;
-			min-width: 0;
-		}
-
-		.wish-body h3 {
-			margin: 0 0 0.5rem;
-			font-size: 1.08rem;
-			font-weight: 600;
-			color: #f4f9ff;
-			line-height: 1.4;
-		}
-
-		.wish-meta {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 0.4rem;
-			margin-top: 0.6rem;
-		}
-
-		.wish-tag {
-			display: inline-block;
-			background: rgba(255,255,255,0.06);
-			border: 1px solid rgba(255,255,255,0.12);
-			border-radius: 999px;
-			padding: 0.22rem 0.52rem;
-			font-size: 0.72rem;
-			line-height: 1.5;
-			color: #dfefff;
-		}
-
-		@media (max-width: 900px) {
-			.wish-list {
-				grid-template-columns: repeat(2, minmax(0, 1fr));
-			}
-		}
-
-		@media (max-width: 560px) {
-			.attribute-filters {
-				grid-template-columns: repeat(2, minmax(0, 1fr));
-			}
-
-			.wish-list {
-				grid-template-columns: 1fr;
-			}
-
-			.wish-card {
-				flex-direction: column;
-			}
-
-			.wish-thumb {
-				flex-basis: auto;
-				min-height: 120px;
-				border-right: none;
-				border-bottom: 1px solid rgba(255,255,255,0.08);
-			}
-		}
-	</style>
+	<link rel="stylesheet" href="css/wishes.css">
 </head>
 <body>
 	<header>
@@ -366,14 +115,14 @@
 			70: 'images/love/tanzaku070.png',
 			75: 'images/hobby/tanzaku075.png',
 			76: 'images/dream/tanzaku076.png',
-			77: 'images/health/tanzaku077.png',
+			77: 'images/survey×/tanzaku077.png',
 			78: 'images/other/tanzaku078.png',
 			79: 'images/other/tanzaku079.png',
 			80: 'images/study/tanzaku080.png',
 			81: 'images/survey×/tanzaku081.png',
 			82: 'images/survey×/tanzaku082.png',
 			83: 'images/health/tanzaku083.png',
-			84: 'images/study/tanzaku084.png',
+			84: 'images/survey×/tanzaku084.png',
 			86: 'images/survey×/tanzaku086.png',
 			87: 'images/survey×/tanzaku087.png',
 			88: 'images/health/tanzaku088.png',
@@ -381,34 +130,223 @@
 			90: 'images/dream/tanzaku090.png',
 			92: 'images/family/tanzaku092.png',
 			95: 'images/family/tanzaku095.png',
-			96: 'images/family/tanzaku096.png'
+			96: 'images/family/tanzaku096.png',
+			97: 'images/dream/tanzaku097.png',
+			99: 'images/money/tanzaku099.png',
+			100: 'images/health/tanzaku100.png',
+			101: 'images/health/tanzaku101.png',
+			102: 'images/family/tanzaku102.png',
+			103: 'images/money/tanzaku103.png',
+			110: 'images/hobby/tanzaku110.png',
+			123: 'images/health/tanzaku123.png',
+			124: 'images/health/tanzaku124.png',
+			125: 'images/dream/tanzaku125.png',
+			126: 'images/dream/tanzaku126.png',
+			127: 'images/dream/tanzaku127.png',
+			128: 'images/love/tanzaku128.png',
+			129: 'images/study/tanzaku129.png',
+			132: 'images/survey×/tanzaku132.png',
+			134: 'images/health/tanzaku134.png',
+			135: 'images/dream/tanzaku135.png',
+			136: 'images/love/tanzaku136.png',
+			137: 'images/dream/tanzaku137.png',
+			141: 'images/friend/tanzaku141.png',
+			142: 'images/love/tanzaku142.png',
+			143: 'images/love/tanzaku143.png',
+			144: 'images/survey×/tanzaku144.png',
+			147: 'images/love/tanzaku147.png',
+			149: 'images/survey×/tanzaku149.png',
+			150: 'images/dream/tanzaku150.png',
+			151: 'images/love/tanzaku151.png',
+			152: 'images/love/tanzaku152.png',
+			154: 'images/other/tanzaku154.png',
+			155: 'images/hobby/tanzaku155.png',
+			156: 'images/survey×/tanzaku156.png',
+			157: 'images/survey×/tanzaku157.png',
+			159: 'images/hobby/tanzaku159.png',
+			160: 'images/friend/tanzaku160.png',
+			161: 'images/health/tanzaku161.png',
+			162: 'images/hobby/tanzaku162.png',
+			167: 'images/love/tanzaku167.png',
+			169: 'images/dream/tanzaku169.png',
+			170: 'images/health/tanzaku170.png',
+			172: 'images/dream/tanzaku172.png',
+			173: 'images/study/tanzaku173.png',
+			175: 'images/other/tanzaku175.png',
+			176: 'images/work/tanzaku176.png',
+			180: 'images/study/tanzaku180.png',
+			181: 'images/hobby/tanzaku181.png',
+			183: 'images/survey×/tanzaku183.png',
+			185: 'images/study/tanzaku185.png',
+			186: 'images/other/tanzaku186.png',
+			187: 'images/dream/tanzaku187.png',
+			188: 'images/health/tanzaku188.png',
+			189: 'images/survey×/tanzaku189.png',
+			190: 'images/work/tanzaku190.png',
+			191: 'images/survey×/tanzaku191.png',
+			192: 'images/other/tanzaku192.png',
+			193: 'images/hobby/tanzaku193.png',
+			194: 'images/survey×/tanzaku194.png',
+			195: 'images/health/tanzaku195.png',
+			196: 'images/work/tanzaku196.png',
+			197: 'images/study/tanzaku197.png',
+			198: 'images/health/tanzaku198.png',
+			200: 'images/health/tanzaku200.png',
+			201: 'images/hobby/tanzaku201.png',
+			202: 'images/love/tanzaku202.png',
+			203: 'images/health/tanzaku203.png',
+			204: 'images/family/tanzaku204.png',
+			208: 'images/friend/tanzaku208.png',
+			210: 'images/study/tanzaku210.png',
+			211: 'images/survey×/tanzaku211.png',
+			212: 'images/study/tanzaku212.png',
+			213: 'images/study/tanzaku213.png',
+			214: 'images/survey×/tanzaku214.png',
+			215: 'images/survey×/tanzaku215.png',
+			219: 'images/other/tanzaku219.png',
+			221: 'images/love/tanzaku221.png',
+			226: 'images/family/tanzaku226.png',
+			228: 'images/other/tanzaku228.png',
+			229: 'images/work/tanzaku229.png',
+			230: 'images/other/tanzaku230.png',
+			231: 'images/hobby/tanzaku231.png',
+			232: 'images/work/tanzaku232.png',
+			233: 'images/other/tanzaku233.png',
+			235: 'images/survey×/tanzaku235.png',
+			236: 'images/other/tanzaku236.png',
+			237: 'images/survey×/tanzaku237.png',
+			238: 'images/dream/tanzaku238.png',
+			241: 'images/survey×/tanzaku241.png',
+			243: 'images/survey×/tanzaku243.png',
+			244: 'images/survey×/tanzaku244.png',
+			245: 'images/work/tanzaku245.png',
+			256: 'images/survey×/tanzaku256.png',
+			257: 'images/survey×/tanzaku257.png',
+			258: 'images/work/tanzaku258.png',
+			260: 'images/other/tanzaku260.png',
+			261: 'images/other/tanzaku261.png',
+			262: 'images/dream/tanzaku262.png',
+			263: 'images/other/tanzaku263.png',
+			268: 'images/study/tanzaku268.png',
+			269: 'images/health/tanzaku269.png',
+			271: 'images/love/tanzaku271.png',
+			273: 'images/dream/tanzaku273.png',
+			274: 'images/work/tanzaku274.png',
+			275: 'images/study/tanzaku275.png',
+			277: 'images/survey×/tanzaku277.png',
+			278: 'images/love/tanzaku278.png',
+			279: 'images/survey×/tanzaku279.png',
+			281: 'images/survey×/tanzaku281.png',
+			282: 'images/survey×/tanzaku282.png',
+			283: 'images/survey×/tanzaku283.png',
+			284: 'images/study/tanzaku284.png',
+			285: 'images/love/tanzaku285.png',
+			286: 'images/survey×/tanzaku286.png',
+			287: 'images/other/tanzaku287.png',
+			288: 'images/love/tanzaku288.png',
+			292: 'images/survey×/tanzaku292.png',
+			294: 'images/survey×/tanzaku294.png',
+			295: 'images/dream/tanzaku295.png',
+			296: 'images/survey×/tanzaku296.png',
+			297: 'images/health/tanzaku297.png',
+			303: 'images/health/tanzaku303.png',
+			305: 'images/other/tanzaku305.png',
+			306: 'images/survey×/tanzaku306.png',
+			307: 'images/dream/tanzaku307.png',
+			308: 'images/survey×/tanzaku308.png',
+			309: 'images/health/tanzaku309.png',
+			320: 'images/dream/tanzaku320.png',
+			321: 'images/other/tanzaku321.png',
+			322: 'images/study/tanzaku322.png',
+			324: 'images/work/tanzaku324.png',
+			325: 'images/money/tanzaku325.png',
+			327: 'images/other/tanzaku327.png',
+			328: 'images/dream/tanzaku328.png',
+			329: 'images/work/tanzaku329.png',
+			330: 'images/work/tanzaku330.png',
+			343: 'images/study/tanzaku343.png',
+			344: 'images/study/tanzaku344.png',
+			345: 'images/money/tanzaku345.png',
+			346: 'images/survey×/tanzaku346.png',
+			347: 'images/survey×/tanzaku347.png',
+			349: 'images/friend/tanzaku349.png',
+			350: 'images/hobby/tanzaku350.png',
+			351: 'images/study/tanzaku351.png',
+			352: 'images/study/tanzaku352.png',
+			353: 'images/love/tanzaku353.png',
+			354: 'images/money/tanzaku354.png',
+			356: 'images/survey×/tanzaku356.png',
+			357: 'images/hobby/tanzaku357.png',
+			358: 'images/dream/tanzaku358.png',
+			360: 'images/hobby/tanzaku360.png',
+			361: 'images/health/tanzaku361.png',
+			363: 'images/work/tanzaku363.png',
+			364: 'images/other/tanzaku364.png',
+			365: 'images/work/tanzaku365.png',
+			367: 'images/work/tanzaku367.png',
+			369: 'images/work/tanzaku369.png',
+			370: 'images/survey×/tanzaku370.png',
+			371: 'images/survey×/tanzaku371.png',
+			372: 'images/study/tanzaku372.png',
+			373: 'images/dream/tanzaku373.png',
+			384: 'images/study/tanzaku384.png',
+			385: 'images/health/tanzaku385.png',
+			386: 'images/love/tanzaku386.png',
+			389: 'images/study/tanzaku389.png',
+			390: 'images/dream/tanzaku390.png',
+			391: 'images/love/tanzaku391.png',
+			392: 'images/family/tanzaku392.png',
+			393: 'images/other/tanzaku393.png',
+			394: 'images/study/tanzaku394.png',
+			395: 'images/dream/tanzaku395.png',
+			396: 'images/money/tanzaku396.png',
+			397: 'images/study/tanzaku397.png',
+			398: 'images/dream/tanzaku398.png'
 		};
 
-		const categoryNames = ['健康', '夢', '家族', '趣味', '恋愛', 'お金', 'その他', '勉強', '仕事'];
+		const categoryNames = ['健康', '夢', '家族', '趣味', '恋愛', 'お金', 'その他', '勉強', '仕事', '友達'];
 		const folderCategories = {
 			health: '健康', dream: '夢', family: '家族', hobby: '趣味',
 			love: '恋愛', money: 'お金', other: 'その他', study: '勉強',
-			work: '仕事', 'survey×': 'その他'
+			work: '仕事', friend: '友達', 'survey×': 'その他'
 		};
 
 		// 編集用: 番号ごとの情報を追加します。例: 3: { category: '健康', tags: ['睡眠'], zodiac: '牡牛座', ageGroup: '20代', gender: '女性' }
-		// category は上の9種類から選択。tags は自由に追加でき、空の属性は省略できます。
+		// category は上の10種類から選択。tags は自由に追加でき、空の属性は省略できます。
 		const wishMetadata = {
 			1: { category: '健康', tags: ['学生', '夜'], zodiac: '牡牛座', gender: '女性' },
 			2: { category: '夢', tags: ['学生', '夜'], zodiac: '蠍座', gender: '女性' },
 			3: { category: '健康', tags: ['学生', '朝'], zodiac: '蟹座', gender: '女性' },
 			4: { category: '勉強', tags: ['学生', '夜'], zodiac: '獅子座', gender: '女性' },
+			5: { category: '夢', tags: ['学生', '夜'], zodiac: '天秤座', gender: '女性' },
+			6: { category: '勉強', tags: ['学生', '夕方'], zodiac: '獅子座', gender: '女性' },
+			7: { category: '夢', tags: ['学生', '夜'], zodiac: '水瓶座', gender: '女性' },
+			8: { category: '趣味', tags: ['学生', '夜'], zodiac: '射手座', gender: '女性' },
+			10: { category: '夢', tags: ['学生', '夜'], zodiac: '魚座', gender: '女性' },
+			11: { category: '恋愛', tags: ['学生', '夜'], zodiac: '天秤座', gender: '女性' },
+			12: { category: '恋愛', tags: ['学生', '夜'], zodiac: '牡牛座', gender: '女性' },
+			13: { category: '夢', tags: ['学生', '夜'], zodiac: '牡牛座', gender: '男性' },
+			14: { category: 'その他', tags: ['学生', '夜'], zodiac: '射手座', gender: '女性' },
+			15: { category: 'お金', tags: ['学生', '夜'], zodiac: '山羊座', gender: '男性' },
+			16: { category: '夢', tags: ['学生', '朝'], zodiac: '天秤座', gender: '女性' },
+			17: { category: 'その他', tags: ['学生', '夜'], zodiac: '魚座', gender: '女性' },
+			18: { category: '健康', tags: ['学生', '夜'] },
 		};
 
-		const wishData = Array.from({ length: 200 }, (_, index) => {
+		const wishData = Array.from({ length: 398 }, (_, index) => {
 			const number = index + 1;
 			const padded = String(number).padStart(3, '0');
 			const fileNumber = number < 10 ? `00${number}` : number < 100 ? `0${number}` : String(number);
 			const pageId = `wish${fileNumber}`;
-			const image = imageMap[number] || `images/health/tanzaku${fileNumber}.png`;
+			const image = imageMap[number] || '';
 			const folder = imageMap[number]?.split('/')[1];
 			const metadata = wishMetadata[number] || {};
 			const category = metadata.category || folderCategories[folder] || '未分類';
+			const categoryColor = folder === 'survey×' ? 'survey' : folder || {
+				健康: 'health', 夢: 'dream', 家族: 'family', 趣味: 'hobby',
+				恋愛: 'love', お金: 'money', その他: 'other', 勉強: 'study',
+				仕事: 'work', 友達: 'friend'
+			}[category] || 'other';
 			const tags = [category, ...(metadata.tags || []), metadata.zodiac, metadata.ageGroup, metadata.gender].filter(Boolean);
 
 			return {
@@ -416,6 +354,7 @@
 				title: `たんざく${padded}`,
 				url: `wishes/${pageId}.html`,
 				category,
+				categoryColor,
 				zodiac: metadata.zodiac || '',
 				ageGroup: metadata.ageGroup || '',
 				gender: metadata.gender || '',
@@ -423,6 +362,7 @@
 				image
 			};
 		});
+		const visibleWishData = wishData.filter((item) => item.image);
 
 		const tagFilters = document.getElementById('tag-filters');
 		const wishList = document.getElementById('wish-list');
@@ -433,9 +373,30 @@
 		const filterSummary = document.getElementById('filter-summary');
 		const duplicateTags = document.getElementById('duplicate-tags');
 		let activeCategory = 'すべて';
+		const returnWishId = sessionStorage.getItem('wishListReturnId');
+		const returnCardTop = Number(sessionStorage.getItem('wishListReturnCardTop'));
+		const returnScrollY = Number(sessionStorage.getItem('wishListReturnScrollY'));
+		const returnCategory = sessionStorage.getItem('wishListReturnCategory');
+		const returnZodiac = sessionStorage.getItem('wishListReturnZodiac');
+		const returnAge = sessionStorage.getItem('wishListReturnAge');
+		const returnGender = sessionStorage.getItem('wishListReturnGender');
+		const returnTagQuery = sessionStorage.getItem('wishListReturnTagQuery');
+
+		if (returnWishId) {
+			[
+				'wishListReturnId',
+				'wishListReturnCardTop',
+				'wishListReturnScrollY',
+				'wishListReturnCategory',
+				'wishListReturnZodiac',
+				'wishListReturnAge',
+				'wishListReturnGender',
+				'wishListReturnTagQuery'
+			].forEach((key) => sessionStorage.removeItem(key));
+		}
 
 		function populateSelect(select, key, label) {
-			const values = [...new Set(wishData.map((item) => item[key]).filter(Boolean))].sort();
+			const values = [...new Set(visibleWishData.map((item) => item[key]).filter(Boolean))].sort();
 			select.innerHTML = '';
 			const allOption = document.createElement('option');
 			allOption.value = '';
@@ -468,8 +429,10 @@
 
 		function renderDuplicateTags() {
 			const counts = new Map();
-			wishData.forEach((item) => {
-				new Set(item.tags).forEach((tag) => counts.set(tag, (counts.get(tag) || 0) + 1));
+			visibleWishData.forEach((item) => {
+				[...new Set(item.tags)]
+					.filter((tag) => !categoryNames.includes(tag) && tag !== '未分類')
+					.forEach((tag) => counts.set(tag, (counts.get(tag) || 0) + 1));
 			});
 			const repeated = [...counts.entries()].filter(([, count]) => count > 1);
 			duplicateTags.innerHTML = '<span class="duplicate-tags-label">重複タグ:</span>';
@@ -491,7 +454,7 @@
 
 		function renderList() {
 			const query = tagSearch.value.trim().toLocaleLowerCase();
-			const filtered = wishData.filter((item) => {
+			const filtered = visibleWishData.filter((item) => {
 				const matchesCategory = activeCategory === 'すべて' || item.category === activeCategory;
 				const matchesZodiac = !zodiacFilter.value || item.zodiac === zodiacFilter.value;
 				const matchesAge = !ageFilter.value || item.ageGroup === ageFilter.value;
@@ -501,19 +464,34 @@
 			});
 
 			wishList.innerHTML = '';
-			filterSummary.textContent = `${filtered.length}件 / ${wishData.length}件`;
+			filterSummary.textContent = `${filtered.length}件 / ${visibleWishData.length}件`;
 
 			filtered.forEach((item) => {
 				const card = document.createElement('a');
 				card.href = item.url;
-				card.className = 'wish-card';
+				card.className = `wish-card wish-card--${item.categoryColor}`;
+				card.dataset.wishId = item.id;
+				card.addEventListener('click', () => {
+					sessionStorage.setItem('wishListReturnId', item.id);
+					sessionStorage.setItem('wishListReturnCardTop', String(card.getBoundingClientRect().top));
+					sessionStorage.setItem('wishListReturnScrollY', String(window.scrollY));
+					sessionStorage.setItem('wishListReturnCategory', activeCategory);
+					sessionStorage.setItem('wishListReturnZodiac', zodiacFilter.value);
+					sessionStorage.setItem('wishListReturnAge', ageFilter.value);
+					sessionStorage.setItem('wishListReturnGender', genderFilter.value);
+					sessionStorage.setItem('wishListReturnTagQuery', tagSearch.value);
+				});
 
-				const thumb = document.createElement('div');
-				thumb.className = 'wish-thumb';
-				const thumbImg = document.createElement('img');
-				thumbImg.src = item.image;
-				thumbImg.alt = item.title;
-				thumb.appendChild(thumbImg);
+				if (item.image) {
+					const thumb = document.createElement('div');
+					thumb.className = 'wish-thumb';
+					const thumbImg = document.createElement('img');
+					thumbImg.src = item.image;
+					thumbImg.alt = item.title;
+					thumbImg.addEventListener('error', () => thumb.remove(), { once: true });
+					thumb.appendChild(thumbImg);
+					card.appendChild(thumb);
+				}
 
 				const body = document.createElement('div');
 				body.className = 'wish-body';
@@ -533,7 +511,6 @@
 
 				body.appendChild(title);
 				body.appendChild(meta);
-				card.appendChild(thumb);
 				card.appendChild(body);
 				wishList.appendChild(card);
 			});
@@ -542,11 +519,28 @@
 		populateSelect(zodiacFilter, 'zodiac', '星座');
 		populateSelect(ageFilter, 'ageGroup', '年代');
 		populateSelect(genderFilter, 'gender', '性別');
+		if (categoryNames.includes(returnCategory) || returnCategory === '未分類' || returnCategory === 'すべて') {
+			activeCategory = returnCategory;
+		}
+		if ([...zodiacFilter.options].some((option) => option.value === returnZodiac)) zodiacFilter.value = returnZodiac;
+		if ([...ageFilter.options].some((option) => option.value === returnAge)) ageFilter.value = returnAge;
+		if ([...genderFilter.options].some((option) => option.value === returnGender)) genderFilter.value = returnGender;
+		if (returnTagQuery) tagSearch.value = returnTagQuery;
 		[zodiacFilter, ageFilter, genderFilter].forEach((select) => select.addEventListener('change', renderList));
 		tagSearch.addEventListener('input', renderList);
 		renderFilters();
 		renderDuplicateTags();
 		renderList();
+		if (returnWishId) {
+			requestAnimationFrame(() => {
+				const card = [...wishList.children].find((item) => item.dataset.wishId === returnWishId);
+				if (card && Number.isFinite(returnCardTop)) {
+					window.scrollTo(0, Math.max(0, window.scrollY + card.getBoundingClientRect().top - returnCardTop));
+				} else if (Number.isFinite(returnScrollY)) {
+					window.scrollTo(0, Math.max(0, returnScrollY));
+				}
+			});
+		}
 	</script>
 
 	<script src="javascript_menu/script.js"></script>
