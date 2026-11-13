@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>たんざく364 - 綴る星空</title>
+	<link rel="stylesheet" href="../css/style.css">
+	<link rel="stylesheet" href="../css/wish-detail.css">
+</head>
+<body>
+	<header>
+		<h1 class="site-logo site-logo-static">
+  <a href="../index.html" aria-label="タイトルへ戻る">
+    <img class="site-logo-image" src="../images/titlelogo.png" alt="綴る星空">
+  </a>
+</h1>
+
+
+
+		<button class="menu-btn" id="js-btn" aria-label="メニュー">
+			<span class="icon-open">≡</span>
+			<span class="icon-close">×</span>
+		</button>
+
+		<nav class="nav-menu" id="js-nav">
+			<ul>
+				<li><a href="../index.html">Home</a></li>
+				<li><a href="../about.html">About</a></li>
+				<li><a href="../event.html">Event</a></li>
+				<li><a href="../wishes.html">Wishes</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<div class="stars" aria-hidden="true"></div>
+
+	<main class="content">
+		<article class="wish-page">
+			<a class="wish-list-back" href="../wishes.html" aria-label="願い事一覧へ戻る">←</a>
+			<p class="wish-breadcrumb">
+				<a href="../wishes.html">願い事一覧</a>
+			</p>
+
+			<section class="wish-header">
+				<div class="wish-image">
+					<img src="../images/other/tanzaku364.png" alt="たんざく364の画像">
+				</div>
+
+				
+					<div class="wish-summary">
+					<p class="wish-field-label">カテゴリー</p>
+					<h2>その他</h2>
+					<p class="wish-shared-label">お願いごとの理由</p>
+					<h3>たんざく364 の願いを、星に託して届けます。</h3>
+					<br>
+					<p class="wish-shared-label">願いを誰に話したか</p>
+					<h3>未記入</h3>
+					<br>
+					<p class="wish-shared-label">願いが叶ってほしい度合い</p>
+					<div class="wish-rating" role="img" aria-label="願いが叶ってほしい度: 4.5 / 5">
+						<span class="wish-rating-stars" aria-hidden="true">
+							<span class="wish-rating-star is-full">★</span>
+							<span class="wish-rating-star is-full">★</span>
+							<span class="wish-rating-star is-full">★</span>
+							<span class="wish-rating-star is-full">★</span>
+							<span class="wish-rating-star is-half">★</span>
+						</span>
+						<span class="wish-rating-value" aria-hidden="true">4.5 / 5</span>
+					</div>
+				
+				</div>
+			</section>
+
+			<section class="wish-detail">
+				<h3>願いの詳細</h3>
+				<p>
+					このページは、願いを綴るための短冊として作成されています。<br>
+					たんざく364 の気持ちを、静かな夜空に向かって丁寧に書き残します。
+				</p>
+				<ul>
+					<li>小さな願いでも大切にしたい</li>
+					<li>今日を少しでも安心して過ごしたい</li>
+					<li>明日へ向かう力を受け取りたい</li>
+				</ul>
+			</section>
+
+			<div class="wish-actions">
+				<a class="back-link" href="../wishes.html">← 一覧へ戻る</a>
+			</div>
+		</article>
+	</main>
+
+	<script>
+		const stars = document.querySelector('.stars');
+		const starCount = 140;
+
+		for (let i = 0; i < starCount; i++) {
+			const star = document.createElement('span');
+			const size = (Math.random() * 3 + 1).toFixed(2) + 'px';
+			const left = (Math.random() * 100).toFixed(2) + '%';
+			const top = (Math.random() * 100).toFixed(2) + '%';
+			const opacity = (Math.random() * 0.9 + 0.1).toFixed(2);
+			const duration = (Math.random() * 3 + 2).toFixed(2) + 's';
+			const delay = (Math.random() * 5).toFixed(2) + 's';
+
+			star.className = 'star';
+			star.style.width = size;
+			star.style.height = size;
+			star.style.left = left;
+			star.style.top = top;
+			star.style.opacity = opacity;
+			star.style.animationDuration = duration;
+			star.style.animationDelay = delay;
+
+			stars.appendChild(star);
+		}
+	</script>
+	<script src="../javascript_menu/wish-animations.js"></script>
+</body>
+</html>
