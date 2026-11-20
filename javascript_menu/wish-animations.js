@@ -1,3 +1,43 @@
+(() => {
+	const cursorEffectLoader = document.createElement('script');
+	cursorEffectLoader.src = new URL('cursor-stars.js', document.currentScript.src).href;
+	document.head.appendChild(cursorEffectLoader);
+})();
+
+function initializePageLoader() {
+	if (window.pageLoaderInitialized || document.readyState === 'complete') return;
+	window.pageLoaderInitialized = true;
+
+	const loader = document.createElement('div');
+	loader.className = 'page-loader';
+	loader.setAttribute('role', 'status');
+	loader.setAttribute('aria-live', 'polite');
+	loader.innerHTML = '<span class="page-loader-orbit" aria-hidden="true"><span class="page-loader-star">✦</span></span><span class="page-loader-text">星空を読み込んでいます...</span>';
+
+	let pageReady = false;
+	const showTimer = window.setTimeout(() => {
+		if (pageReady) return;
+		document.body.appendChild(loader);
+		requestAnimationFrame(() => {
+			if (!pageReady) loader.classList.add('is-visible');
+		});
+	}, 280);
+
+	const hideLoader = () => {
+		pageReady = true;
+		window.clearTimeout(showTimer);
+		loader.classList.remove('is-visible');
+		window.setTimeout(() => loader.remove(), 300);
+	};
+
+	window.addEventListener('load', hideLoader, { once: true });
+	window.addEventListener('pageshow', (event) => {
+		if (event.persisted) hideLoader();
+	});
+}
+
+initializePageLoader();
+
 const wishHeader = document.querySelector('.wish-header');
 const wishImage = wishHeader?.querySelector('.wish-image img');
 
