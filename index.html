@@ -6,7 +6,7 @@
     <title>綴る星空</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="index-page" id="top">
     <header>
         <h1 class="site-logo site-logo-static">
   <a href="index.html" aria-label="タイトルへ戻る">
@@ -53,21 +53,118 @@
     <div class="stars" aria-hidden="true"></div>
 
     <main class="content index-content">
-        <p class="index-tagline" aria-label="願いを、夜空へ。">
-            <span aria-hidden="true">願</span>
-            <span aria-hidden="true">い</span>
-            <span aria-hidden="true">を</span>
-            <span aria-hidden="true">、</span>
-            <span aria-hidden="true">夜</span>
-            <span aria-hidden="true">空</span>
-            <span aria-hidden="true">へ</span>
-            <span aria-hidden="true">。</span>
-        </p>
-        <h1>一人ひとりの願いを七夕の短冊によって手書きの文化を残していく研究</h1>
-        <p>VSCodeを使って初めてのページを作成しています。</p>
-        <a class="index-wishes-link" href="wishes.html">願いの一覧を見る</a>
-        <section class="index-text-area" aria-label="文章"></section>
+        <section class="index-opening" aria-label="サイトの紹介">
+
+            <br>
+            <br>
+            <br>
+            <br>
+
+            <p class="index-tagline" aria-label="願いを、夜空へ。">
+                <span aria-hidden="true">願</span>
+                <span aria-hidden="true">い</span>
+                <span aria-hidden="true">を</span>
+                <span aria-hidden="true">、</span>
+                <span aria-hidden="true">夜</span>
+                <span aria-hidden="true">空</span>
+                <span aria-hidden="true">へ</span>
+                <span aria-hidden="true">。</span>
+            </p>
+
+            <br>
+            <br>
+            <br>
+            <br>
+
+            <h1>一人ひとりの願いを七夕の短冊によって</h1>
+            <h1>手書きの文化を残していく研究</h1>
+            
+            <a class="index-wishes-link" href="wishes.html">願いの一覧を見る</a>
+            <a class="index-event-link" href="event.html">イベントの記録を見る</a>
+
+             <br>
+            <br>
+            <br>
+            <br>
+            
+            <a class="index-scroll-hint" href="#star-story">
+                星をたどってスクロール
+                <span aria-hidden="true">↓</span>
+            </a>
+        </section>
+
+        <section class="star-story" id="star-story" aria-label="星をたどるストーリー">
+            <svg class="story-route" viewBox="0 0 100 1000" preserveAspectRatio="none" aria-hidden="true">
+                <path class="story-route-line" d="M50 0"></path>
+                <path class="story-route-progress" d="M50 0"></path>
+            </svg>
+            <span class="story-guide-star" aria-hidden="true">✦</span>
+
+            <div class="story-heading story-reveal">
+                <p class="story-eyebrow"></p>
+                <h2></h2>
+                <p></p>
+            </div>
+
+            <section class="story-section story-section--left story-reveal">
+                <p class="story-number">01</p>
+                <p class="story-label"></p>
+                <h3>制作者について</h3>
+                <p>福岡県在住の大学生です。</p>
+                <p>このサイトは、九州産業大学芸術学部ソーシャルデザイン学科の卒業研究として制作しました。<p>
+                <p>卒業研究作品『綴る星空』
+                <p>研究テーマは「一人ひとりの願いを七夕の短冊によって手書きの文化を残していく研究」です。
+
+
+            </section>
+
+            <section class="story-section story-section--right story-reveal">
+                <p class="story-number">02</p>
+                <p class="story-label"></p>
+                <h3>背景目的</h3>
+                <p>七夕は、願い事を短冊に書き、笹へ飾る日本の伝統文化として親しまれている。近年では地域イベントや商業施設などでも広く行われているが、多くの場合、短冊はイベント終了後に処分され、一時的な体験として消費されてしまうことが多い。
+しかし短冊には、人それぞれの願いや悩み、不安、目標など、その人自身の感情や想いが込められている。また、手書きで書くという文化が減ってきている今、短冊によって手書きの文化を残していきたいという思いもあり、特に現代では、将来への不安や人間関係の悩みなどを一人で抱え込み、孤独を感じる人も少なくない。
+七夕には、願いを実際に短冊へ書き、空間の中で共有する文化があるため、デジタルだけではなく、手書きや空間体験を通して感情と向き合う時間を作りたいと考えた。</p>
+            </section>
+
+            <section class="story-section story-section--left story-reveal">
+                <p class="story-number">03</p>
+                <p class="story-label"></p>
+                <h3>コンセプト</h3>
+                <p>感情を眺める夜空<p>
+                <p>願いが消えないこと<p>
+                <p>誰かの願いが、誰かの安心になること<p>
+                <p>手書きの良さを改めて知ってもらう<p>
+            </section>
+
+            <section class="story-section story-section--right story-reveal">
+                <p class="story-number">04</p>
+                <p class="story-label"></p>
+                <h3>イベントについて</h3>
+                <p>7月6,7日に九州産業大学北門楠風広場にて<p>
+                <p>七夕イベント「綴る星空」を実施しました。<p>
+                <p>イベントの詳細についてはこちらをご覧ください。<p>
+                <br>
+                <a class="index-event-link" href="event.html">イベントの記録を見る</a>
+            </section>
+        </section>
     </main>
+
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <a class="index-back-to-top" href="#top" aria-label="ページの一番上に戻る">
+        <img src="gif/goatred.gif" alt="">
+        <span>上に戻る</span>
+    </a>
 
     <script src="javascript_menu/script.js"></script>
 </body>

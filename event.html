@@ -33,11 +33,52 @@
 
 	<div class="stars" aria-hidden="true"></div>
 
-	<main class="content">
-		<h2>Event</h2>
-		<p>イベント情報をここに掲載します。</p>
+	<main class="event-page">
+		<section class="event-introduction" id="event-introduction">
+			<div class="event-introduction-inner">
+				<p class="event-introduction-label">TANABATA EVENT</p>
+				<h2>綴る星空</h2>
+				<p>7月6、7日に九州産業大学楠風広場にて七夕のイベントを開催しました。</p>
+				<p>イベント当日の様子を写真に記録しました。星のボタンを押すと、写真を選んでご覧いただけます。</p>
+				<div class="event-links">
+					<a class="event-gallery-link" href="#event-photos">写真を見る <span aria-hidden="true">↓</span></a>
+					<a class="event-gallery-link" href="#event-video">動画を見る <span aria-hidden="true">↓</span></a>
+				</div>
+			</div>
+		</section>
+
+		<section class="event-video-section" id="event-video" aria-labelledby="event-video-heading">
+			<div class="event-video-inner">
+				<p class="event-video-label">EVENT MOVIE</p>
+				<h2 id="event-video-heading">七夕イベントの動画</h2>
+				<div class="event-video">
+					<iframe
+						src="https://www.youtube.com/embed/ZflI3VYgL2Q?si=zzBRPXaIH4rkWQ8Z"
+						title="七夕イベントの動画"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						referrerpolicy="strict-origin-when-cross-origin"
+						allowfullscreen
+					></iframe>
+				</div>
+			</div>
+		</section>
+
+		<section class="content event-content" id="event-photos" aria-label="七夕イベントの写真">
+			<h2 class="event-heading">七夕イベント</h2>
+			<figure class="event-slideshow" aria-label="七夕イベントの記録">
+				<img class="event-photo is-visible" src="images/event/DSC05077.jpg" alt="七夕イベントの様子">
+				<img class="event-photo" alt="" aria-hidden="true">
+				<figcaption class="event-caption">七夕イベントの記録</figcaption>
+			</figure>
+			<div class="event-photo-picker" role="group" aria-label="表示する写真を選ぶ"></div>
+			<a class="event-scroll-hint" href="#event-introduction">
+				<span aria-hidden="true">↑</span>
+				イベント紹介へ戻る
+			</a>
+		</section>
 	</main>
 
 	<script src="javascript_menu/script.js"></script>
+	<script src="javascript_menu/event-slideshow.js"></script>
 </body>
 </html>
