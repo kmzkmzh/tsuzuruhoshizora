@@ -2,7 +2,7 @@
 		.wish-page {
 			width: min(960px, 90vw);
 			margin: 0 auto;
-			padding: 2rem 1rem 4rem;
+			padding: 2rem 1rem 8rem;
 			position: relative;
 			z-index: 1;
 		}
@@ -21,7 +21,7 @@
 		.wish-header {
 			display: grid;
 			grid-template-columns: minmax(220px, 260px) 1fr;
-			gap: 1.5rem;
+			gap: 2rem;
 			align-items: start;
 			background: linear-gradient(
 				90deg,
@@ -110,8 +110,8 @@
 		}
 
 		.wish-tags {
-			display: flex;
-			flex-wrap: wrap;
+			display: grid;
+			justify-items: start;
 			gap: 0.5rem;
 			margin: 0 0 1rem;
 		}
@@ -128,7 +128,7 @@
 		.wish-summary p {
 			margin: 0;
 			text-align: left;
-			line-height: 2;
+			line-height: 2.4;
 		}
 
 		.wish-summary,
@@ -139,6 +139,7 @@
 		.wish-summary {
 			line-height: 2;
 			align-self: center;
+			padding-left: clamp(0.75rem, 2vw, 1.25rem);
 		}
 
 		.wish-summary > p:not(.wish-shared-label):not(.wish-field-label):not(.wish-shared-with) {
@@ -214,8 +215,20 @@
 		.wish-detail p,
 		.wish-detail li {
 			text-align: left;
-			line-height: 1.8;
+			line-height: 2.2;
 			font-size: 1rem;
+		}
+
+		.wish-detail p {
+			margin: 0 0 1.25rem;
+		}
+
+		.wish-detail li {
+			margin-bottom: 0.75rem;
+		}
+
+		.wish-detail li:last-child {
+			margin-bottom: 0;
 		}
 
 		.wish-actions {
@@ -235,11 +248,16 @@
 		@media (max-width: 700px) {
 			.wish-header {
 				grid-template-columns: 1fr;
+				gap: 1rem;
 				background: linear-gradient(
 					180deg,
 					rgba(var(--wish-header-rgb), 0.76) 0 240px,
 					rgba(var(--wish-header-rgb), 0.24) 240px 100%
 				);
+			}
+
+			.wish-summary {
+				padding-left: 0;
 			}
 		}
 	
