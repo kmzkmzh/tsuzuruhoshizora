@@ -38,6 +38,12 @@ function initializePageLoader() {
 
 initializePageLoader();
 
+document.querySelectorAll('a[href$="../wishes.html"]').forEach((link) => {
+	link.addEventListener('click', () => {
+		sessionStorage.setItem('skip-wishes-intro', 'true');
+	});
+});
+
 const wishHeader = document.querySelector('.wish-header');
 const wishImage = wishHeader?.querySelector('.wish-image img');
 

@@ -40,7 +40,6 @@ initializePageLoader();
 
 const btn = document.querySelector("#js-btn");
 const nav = document.querySelector("#js-nav");
-const introScreen = document.querySelector(".intro-screen");
 const indexContent = document.querySelector(".index-content");
 const backToTop = document.querySelector(".index-back-to-top");
 
@@ -82,68 +81,115 @@ if(btn && nav){
     });
 }
 
-if(introScreen){
-    const shootingStar = introScreen.querySelector(".shooting-star");
-    const showPeek = () => introScreen.classList.add("iris-peek");
-    const showTitle = () => introScreen.classList.add("title-visible");
-    let skyOpeningStarted = false;
+const openingStory = document.querySelector(".opening-story");
 
-    const openSky = () => {
-        if(skyOpeningStarted) return;
+if(openingStory){
+    const photosLayer = openingStory.querySelector(".opening-story__photos");
+    const destination = openingStory.querySelector(".opening-story__destination");
+    const starsLayer = document.querySelector(".index-page .stars");
+    const question = openingStory.querySelector(".opening-story__message--question");
+    const discarded = openingStory.querySelector(".opening-story__message--discarded");
+    const ending = openingStory.querySelector(".opening-story__message--ending");
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const photoSources = [
+        "images/picture/DSC05112.JPG",
+        "images/picture/DJI_20260707193401_0047_D.JPG",
+        "images/picture/DSC05109.JPG",
+        "images/picture/DSC05092.JPG",
+        "images/picture/DSC05090.JPG"
+    ];
+    const photoPositions = [
+        { x: 30, y: 28, rotation: -8 },
+        { x: 70, y: 28, rotation: 7 },
+        { x: 30, y: 72, rotation: 6 },
+        { x: 70, y: 72, rotation: -7 },
+        { x: 50, y: 50, rotation: 4 }
+    ];
+    const photos = photoSources
+        .map((src, index) => ({ src, ...photoPositions[index] }))
+        .map((photo, index) => {
+            const frame = document.createElement("span");
+            const image = document.createElement("img");
+            frame.className = "opening-story__photo";
+            image.src = photo.src;
+            image.alt = "";
+            image.draggable = false;
+            frame.style.left = `${photo.x}%`;
+            frame.style.top = `${photo.y}%`;
+            frame.style.setProperty("--photo-rotation", `${photo.rotation}deg`);
+            frame.appendChild(image);
+            photosLayer?.appendChild(frame);
+            return { element: frame, index };
+        });
+    const clamp = (value) => Math.min(1, Math.max(0, value));
+    const fadeBetween = (value, start, end) => clamp((value - start) / (end - start));
+    let openingStart = openingStory.getBoundingClientRect().top + window.scrollY;
+    let updateRequested = false;
 
-        skyOpeningStarted = true;
-        setTimeout(showTitle, 0);
-    };
-
-    setTimeout(showPeek, 300);
-
-    if(shootingStar){
-        shootingStar.addEventListener("animationend", openSky, { once: true });
-        setTimeout(openSky, 1300);
-    } else {
-        setTimeout(openSky, 700);
-    }
-
-    const spawnRandomShootingStar = () => {
-        if (Math.random() > 0.18) return;
-
-        const randomStar = document.createElement("span");
-        randomStar.className = "shooting-star";
-
-        const duration = Math.random() * 2.6 + 2.4;
-        const width = Math.random() * 18 + 10;
-        const left = Math.random() * 72 + 8;
-        const top = Math.random() * 26 + 6;
-
-        randomStar.style.left = left + "%";
-        randomStar.style.top = top + "%";
-        randomStar.style.width = width + "vw";
-        randomStar.style.animationDuration = duration + "s";
-        randomStar.style.opacity = "0.9";
-
-        introScreen.appendChild(randomStar);
-        setTimeout(() => randomStar.remove(), (duration + 0.8) * 1000);
-    };
-
-    const scheduleRandomStar = () => {
-        spawnRandomShootingStar();
-        const nextDelay = Math.random() * 12000 + 8000;
-        setTimeout(scheduleRandomStar, nextDelay);
-    };
-
-    setTimeout(scheduleRandomStar, 5000);
-
-    const updateScrollState = () => {
-        const isScrolled = window.scrollY > 40;
-
-        introScreen.classList.toggle("title-hidden", isScrolled);
-        if(indexContent){
-            indexContent.classList.toggle("content-visible", isScrolled);
+    const updateOpeningStory = () => {
+        updateRequested = false;
+        const scrollRange = Math.max(openingStory.offsetHeight - window.innerHeight, 1);
+        const progress = clamp((window.scrollY - openingStart) / scrollRange);
+        const cameraProgress = fadeBetween(progress, 0, 0.22);
+        const zoomOutProgress = fadeBetween(progress, 0.94, 0.97);
+        const backgroundZoom = 1.06 + cameraProgress * 0.82 * (1 - zoomOutProgress);
+        starsLayer?.style.setProperty("--sky-zoom", `${backgroundZoom}`);
+        if(destination){
+            const arrival = fadeBetween(progress, 0.16, 0.22);
+            const bloom = fadeBetween(progress, 0.17, 0.22) * (1 - fadeBetween(progress, 0.25, 0.33));
+            destination.style.setProperty("--destination-scale", `${0.4 + cameraProgress * 2.6}`);
+            destination.style.setProperty("--destination-blur", `${1 + cameraProgress * 4}px`);
+            destination.style.setProperty("--destination-bloom", `${bloom}`);
+            destination.style.setProperty("--destination-bloom-scale", `${0.3 + bloom * 1.4}`);
+            destination.style.opacity = `${0.55 + arrival * 0.45}`;
         }
+        const setMessage = (element, opacity, offset = 1 - opacity) => {
+            if(!element) return;
+            element.style.opacity = `${opacity}`;
+            if(!prefersReducedMotion) element.style.transform = `translateY(${offset * 18}px)`;
+        };
+
+        setMessage(
+            question,
+            fadeBetween(progress, 0.18, 0.24) * (1 - fadeBetween(progress, 0.34, 0.4))
+        );
+        setMessage(
+            discarded,
+            fadeBetween(progress, 0.5, 0.57) * (1 - fadeBetween(progress, 0.8, 0.88))
+        );
+        setMessage(ending, fadeBetween(progress, 0.87, 0.94));
+
+        photos.forEach(({ element, index }) => {
+            const photoProgress = (progress - (0.5 + index * 0.025)) / 0.22;
+            const visible = fadeBetween(photoProgress, 0, 0.18) * (1 - fadeBetween(progress, 0.69, 0.79));
+            element.style.opacity = `${visible}`;
+            if(prefersReducedMotion){
+                element.style.transform = "translate(-50%, -50%)";
+                return;
+            }
+
+            const scale = photoProgress < 0.2
+                ? 0.55 + photoProgress * 2.25
+                : 1 - fadeBetween(progress, 0.69, 0.79) * 0.2;
+            const rotation = (Number.parseFloat(element.style.getPropertyValue("--photo-rotation")) || 0);
+            element.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) scale(${scale})`;
+        });
+
+        if(progress >= 0.97) indexContent?.classList.add("content-visible");
     };
 
-    window.addEventListener("scroll", updateScrollState, { passive: true });
-    updateScrollState();
+    const requestOpeningUpdate = () => {
+        if(updateRequested) return;
+        updateRequested = true;
+        window.requestAnimationFrame(updateOpeningStory);
+    };
+
+    window.addEventListener("scroll", requestOpeningUpdate, { passive: true });
+    window.addEventListener("resize", () => {
+        openingStart = openingStory.getBoundingClientRect().top + window.scrollY;
+        requestOpeningUpdate();
+    });
+    requestOpeningUpdate();
 }
 
 const starStory = document.querySelector(".star-story");
@@ -154,6 +200,7 @@ if(starStory){
     const storyReveals = [...starStory.querySelectorAll(".story-reveal")];
     const route = starStory.querySelector(".story-route-progress");
     const routeLine = starStory.querySelector(".story-route-line");
+    const constellation = starStory.querySelector(".story-constellation-stars");
     const guideStar = starStory.querySelector(".story-guide-star");
     const starsLayer = document.querySelector(".index-page .stars");
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -183,6 +230,7 @@ if(starStory){
     let routeLength = 0;
     let routeSections = [];
     let routeBoundaries = [];
+    let constellationStars = [];
     let animationRequested = false;
     let currentDistance = 0;
     let targetDistance = 0;
@@ -200,6 +248,9 @@ if(starStory){
         route.style.strokeDashoffset = `${routeLength - currentDistance}`;
         guideStar.style.left = `${point.x}%`;
         guideStar.style.top = `${point.y / 10}%`;
+        constellationStars.forEach((star) => {
+            star.element.classList.toggle("is-connected", currentDistance >= star.distance - 1);
+        });
 
         const sparkleThreshold = Math.max(routeLength * 0.004, 2);
         const boundaryIndex = routeBoundaries.findIndex((boundary) =>
@@ -300,6 +351,7 @@ if(starStory){
         const scaleX = 100 / Math.max(storyBounds.width, 1);
         const scaleY = 1000 / Math.max(storyBounds.height, 1);
         const sections = [];
+        const starDistances = [];
         const headingBounds = storyHeading?.getBoundingClientRect();
         const headingBottom = headingBounds
             ? (headingBounds.bottom - storyBounds.top) * scaleY
@@ -308,10 +360,12 @@ if(starStory){
         let previousY = 0;
         let pathData = `M ${previousX} ${previousY}`;
 
-        pathData += ` C 95 ${headingBottom * 0.3}, 92 ${headingBottom * 0.7}, 88 ${headingBottom}`;
+        starDistances.push(0);
+        pathData += ` L 88 ${headingBottom}`;
         previousX = 88;
         previousY = headingBottom;
         route?.setAttribute("d", pathData);
+        starDistances.push(route?.getTotalLength() ?? 0);
 
         storySections.forEach((section) => {
             const bounds = section.getBoundingClientRect();
@@ -325,29 +379,28 @@ if(starStory){
                     ? (bounds.right - storyBounds.left) * scaleX + 4
                     : (bounds.left - storyBounds.left) * scaleX - 4;
             const entryX = Math.min(96, Math.max(4, edgeX));
-            const gap = Math.max(top - previousY, 1);
-            const horizontalTravel = entryX - previousX;
-
-            pathData += ` C ${previousX + horizontalTravel * 0.32} ${previousY + gap * 0.4}, ${entryX - horizontalTravel * 0.32} ${top - gap * 0.4}, ${entryX} ${top}`;
+            pathData += ` L ${entryX} ${top}`;
             route?.setAttribute("d", pathData);
             const startLength = route?.getTotalLength() ?? 0;
+            starDistances.push(startLength);
 
-            pathData += ` C ${entryX + 2.5} ${top + height * 0.3}, ${entryX - 2.5} ${top + height * 0.7}, ${entryX} ${bottom}`;
+            pathData += ` L ${entryX} ${bottom}`;
             route?.setAttribute("d", pathData);
+            const endLength = route?.getTotalLength() ?? startLength;
+            starDistances.push(endLength);
 
             sections.push({
                 section,
                 top: bounds.top - storyBounds.top,
                 bottom: bounds.bottom - storyBounds.top,
                 startLength,
-                endLength: route?.getTotalLength() ?? startLength
+                endLength
             });
             previousX = entryX;
             previousY = bottom;
         });
 
-        const remainingHeight = Math.max(1000 - previousY, 1);
-        pathData += ` C ${previousX + 6} ${previousY + remainingHeight * 0.35}, 50 ${1000 - remainingHeight * 0.35}, 50 1000`;
+        pathData += " L 50 1000";
         route?.setAttribute("d", pathData);
         routeLength = route?.getTotalLength() ?? 0;
         if(sections.length) sections[sections.length - 1].endLength = routeLength;
@@ -355,11 +408,45 @@ if(starStory){
         if(route) route.style.strokeDasharray = `${routeLength}`;
         routeSections = sections;
         routeBoundaries = routeSections.flatMap((section) => [section.startLength, section.endLength]);
+        starDistances.push(routeLength);
+        constellationStars = [];
+        if(constellation && route){
+            constellation.replaceChildren();
+            const radiusX = 2.2 * 100 / Math.max(storyBounds.width, 1);
+            const radiusY = 2.2 * 1000 / Math.max(storyBounds.height, 1);
+            const glowRadiusX = 5.5 * 100 / Math.max(storyBounds.width, 1);
+            const glowRadiusY = 5.5 * 1000 / Math.max(storyBounds.height, 1);
+
+            starDistances.forEach((distance) => {
+                const point = route.getPointAtLength(distance);
+                const star = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                star.classList.add("story-constellation-star");
+
+                const glow = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+                glow.classList.add("story-constellation-star__glow");
+                glow.setAttribute("cx", `${point.x}`);
+                glow.setAttribute("cy", `${point.y}`);
+                glow.setAttribute("rx", `${glowRadiusX}`);
+                glow.setAttribute("ry", `${glowRadiusY}`);
+
+                const core = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+                core.classList.add("story-constellation-star__core");
+                core.setAttribute("cx", `${point.x}`);
+                core.setAttribute("cy", `${point.y}`);
+                core.setAttribute("rx", `${radiusX}`);
+                core.setAttribute("ry", `${radiusY}`);
+
+                star.append(glow, core);
+                constellation.appendChild(star);
+                constellationStars.push({ element: star, distance });
+            });
+        }
         currentDistance = Math.min(currentDistance, routeLength);
         targetDistance = Math.min(targetDistance, routeLength);
 
         if(prefersReducedMotion){
             if(route) route.style.strokeDashoffset = "0";
+            constellationStars.forEach((star) => star.element.classList.add("is-connected"));
             if(guideStar){
                 guideStar.style.left = "92%";
                 guideStar.style.top = "0%";
