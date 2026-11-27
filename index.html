@@ -31,28 +31,20 @@
         </nav>
     </header>
 
-    <section class="intro-screen">
-        <div class="iris-opening" aria-hidden="true">
-            <svg class="iris-svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
-                <defs>
-                    <mask id="iris-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="1000">
-                        <rect width="1000" height="1000" fill="white"></rect>
-                        <path class="iris-star-cutout" fill="black" d="M500 120 C515 120 525 132 531 149 L585 335 C590 351 605 360 622 360 L815 360 C850 360 865 405 836 425 L680 538 C666 548 660 565 665 582 L725 760 C736 794 697 817 670 797 L520 686 C508 677 492 677 480 686 L330 797 C303 817 264 794 275 760 L335 582 C340 565 334 548 320 538 L164 425 C135 405 150 360 185 360 L378 360 C395 360 410 351 415 335 L469 149 C475 132 485 120 500 120 Z"></path>
-                    </mask>
-                </defs>
-                <rect width="1000" height="1000" fill="#fff" mask="url(#iris-mask)"></rect>
-            </svg>
-            <span class="shooting-star"></span>
-        </div>
-        <img class="intro-logo-image" src="images/titlelogo.png" alt="">
-        <img class="intro-cloud intro-cloud-left" src="images/cloud1.png" alt="">
-        <img class="intro-cloud intro-cloud-left-secondary" src="images/cloud2.png" alt="">
-        <img class="intro-cloud intro-cloud-right" src="images/cloud1.png" alt="">
-    </section>
-
     <div class="stars" aria-hidden="true"></div>
 
     <main class="content index-content">
+        <section class="opening-story" aria-label="オープニングストーリー">
+            <div class="opening-story__viewport">
+                <div class="opening-story__photos" aria-hidden="true"></div>
+                <span class="opening-story__destination" aria-hidden="true"></span>
+                <p class="opening-story__message opening-story__message--question">願いは何処へ行くのだろう</p>
+                <p class="opening-story__message opening-story__message--discarded">イベントが終わると多くの短冊は処分されてしまう</p>
+                <p class="opening-story__message opening-story__message--ending">だから思いを星空に残す</p>
+                <p class="opening-story__hint">スクロールして続きを見る <span aria-hidden="true">↓</span></p>
+            </div>
+        </section>
+
         <section class="index-opening" aria-label="サイトの紹介">
 
             <br>
@@ -91,12 +83,17 @@
                 星をたどってスクロール
                 <span aria-hidden="true">↓</span>
             </a>
+
+            <br>
+            <br>
+
         </section>
 
         <section class="star-story" id="star-story" aria-label="星をたどるストーリー">
             <svg class="story-route" viewBox="0 0 100 1000" preserveAspectRatio="none" aria-hidden="true">
                 <path class="story-route-line" d="M50 0"></path>
                 <path class="story-route-progress" d="M50 0"></path>
+                <g class="story-constellation-stars"></g>
             </svg>
             <span class="story-guide-star" aria-hidden="true">✦</span>
 
@@ -106,17 +103,35 @@
                 <p></p>
             </div>
 
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
             <section class="story-section story-section--left story-reveal">
                 <p class="story-number">01</p>
                 <p class="story-label"></p>
                 <h3>制作者について</h3>
-                <p>福岡県在住の大学生です。</p>
+                <p>福岡県在住の大学生です。<p>
                 <p>このサイトは、九州産業大学芸術学部ソーシャルデザイン学科の卒業研究として制作しました。<p>
-                <p>卒業研究作品『綴る星空』
-                <p>研究テーマは「一人ひとりの願いを七夕の短冊によって手書きの文化を残していく研究」です。
+                <p>卒業研究作品『綴る星空』<p>
+                <p>研究テーマは「一人ひとりの願いを七夕の短冊によって手書きの文化を残していく研究」です。<p>
 
 
             </section>
+
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
 
             <section class="story-section story-section--right story-reveal">
                 <p class="story-number">02</p>
@@ -127,6 +142,15 @@
 七夕には、願いを実際に短冊へ書き、空間の中で共有する文化があるため、デジタルだけではなく、手書きや空間体験を通して感情と向き合う時間を作りたいと考えた。</p>
             </section>
 
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
             <section class="story-section story-section--left story-reveal">
                 <p class="story-number">03</p>
                 <p class="story-label"></p>
@@ -136,6 +160,15 @@
                 <p>誰かの願いが、誰かの安心になること<p>
                 <p>手書きの良さを改めて知ってもらう<p>
             </section>
+
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
 
             <section class="story-section story-section--right story-reveal">
                 <p class="story-number">04</p>

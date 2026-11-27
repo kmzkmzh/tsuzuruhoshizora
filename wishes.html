@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/wishes.css">
 </head>
-<body>
+<body class="wish-intro-active">
 	<header>
 		<h1 class="site-logo site-logo-static">
   <a href="index.html" aria-label="タイトルへ戻る">
@@ -33,25 +33,43 @@
 	</header>
 
 	<div class="stars" aria-hidden="true"></div>
+	<div class="wish-collection-intro" role="status" aria-live="polite" aria-label="願い事は240枚集まりました">
+		<div class="wish-collection-intro__content">
+			<h2 class="wish-collection-heading">集まったお願い事</h2>
+			<div class="wish-collection-chart" aria-hidden="true">
+				<span class="wish-collection-sparkle wish-collection-sparkle--tip"></span>
+				<span class="wish-collection-sparkle wish-collection-sparkle--trail"></span>
+				<span class="wish-collection-sparkle wish-collection-sparkle--trail"></span>
+				<span class="wish-collection-sparkle wish-collection-sparkle--trail"></span>
+				<span class="wish-collection-sparkle wish-collection-sparkle--trail"></span>
+				<span class="wish-collection-sparkle wish-collection-sparkle--trail"></span>
+				<div class="wish-collection-chart__inner">
+					<strong class="wish-collection-count">0</strong>
+					<span>枚</span>
+				</div>
+			</div>
+			<p class="wish-collection-message">願い事は240枚集まりました。</p>
+		</div>
+	</div>
 
 	<main class="content">
 		<div class="wish-page">
 			<div class="wish-intro">
 				<h2>願い事一覧</h2>
-				<p>カテゴリや属性、タグで願い事を絞り込めます。</p>
+				<p>星空をドラッグやスクロールで探索できます。星を選ぶと短冊が開きます。</p>
 			</div>
 
 			<section class="filter-panel" aria-label="願い事の絞り込み">
 				<h3 class="filter-heading">カテゴリ</h3>
 				<div id="tag-filters" class="tag-filters" aria-label="カテゴリ絞り込み"></div>
 				<div class="attribute-filters">
-					<label class="filter-control">星座
+					<label class="filter-control filter-control--select">星座
 						<select id="zodiac-filter" aria-label="星座で絞り込む"></select>
 					</label>
-					<label class="filter-control">年代
+					<label class="filter-control filter-control--select">年代
 						<select id="age-filter" aria-label="年代で絞り込む"></select>
 					</label>
-					<label class="filter-control">性別
+					<label class="filter-control filter-control--select">性別
 						<select id="gender-filter" aria-label="性別で絞り込む"></select>
 					</label>
 					<label class="filter-control">タグを検索
@@ -61,9 +79,136 @@
 				<p id="filter-summary" class="filter-summary" role="status" aria-live="polite"></p>
 				<div id="duplicate-tags" class="duplicate-tags" aria-label="複数の願い事に使われているタグ"></div>
 			</section>
-			<div id="wish-list" class="wish-list"></div>
+			<div class="wish-view-toggle" role="group" aria-label="願い事の表示方法">
+				<button id="wish-list-view-button" class="wish-view-button is-active" type="button" aria-pressed="true" aria-controls="wish-list">一覧</button>
+				<button id="wish-sky-view-button" class="wish-view-button" type="button" aria-pressed="false" aria-controls="wish-sky">星空</button>
+			</div>
+			<div id="wish-list" class="wish-list" aria-label="願い事一覧"></div>
+			<div id="wish-sky" class="wish-sky" aria-label="タグごとに集まる願いの星空" hidden>
+				<div class="wish-sky-toolbar">
+					<span>ドラッグして探索できます。色が変わった星は閲覧済みです。</span>
+					<button id="wish-sky-center" type="button" aria-controls="wish-sky-viewport">中心に戻る</button>
+				</div>
+				<div id="wish-sky-viewport" class="wish-sky-viewport" role="region" aria-label="ドラッグやスクロールで探索できる星空" tabindex="0">
+					<div id="wish-sky-map" class="wish-sky-map"></div>
+				</div>
+			</div>
 		</div>
 	</main>
+
+	<script>
+		(() => {
+			const intro = document.querySelector('.wish-collection-intro');
+			if (!intro) return;
+
+			const navigationEntry = performance.getEntriesByType('navigation')[0];
+			const referrerPath = document.referrer ? new URL(document.referrer).pathname : '';
+			const cameFromWishPage = /\/wishes\/[^/]+\.html$/i.test(referrerPath);
+			const returnedFromWishPage = sessionStorage.getItem('skip-wishes-intro') === 'true';
+			if (returnedFromWishPage) sessionStorage.removeItem('skip-wishes-intro');
+			if (navigationEntry?.type === 'back_forward' || cameFromWishPage || returnedFromWishPage) {
+				intro.remove();
+				document.body.classList.remove('wish-intro-active');
+				return;
+			}
+
+			const chart = intro.querySelector('.wish-collection-chart');
+			const sparkles = [...chart.querySelectorAll('.wish-collection-sparkle')];
+			const chartInner = chart.querySelector('.wish-collection-chart__inner');
+			const message = intro.querySelector('.wish-collection-message');
+			const count = intro.querySelector('.wish-collection-count');
+			const activeNumberSparkles = new Set();
+			const target = 240;
+			const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			const previousOverflow = document.body.style.overflow;
+			let lastNumberSparkAt = 0;
+			document.body.style.overflow = 'hidden';
+
+			window.addEventListener('pageshow', (event) => {
+				if (!event.persisted) return;
+				intro.remove();
+				document.body.classList.remove('wish-intro-active');
+				document.body.style.overflow = previousOverflow;
+			});
+
+			chart.classList.add('is-playing');
+
+			const finish = () => {
+				intro.classList.add('is-leaving');
+				document.body.style.overflow = previousOverflow;
+				window.setTimeout(() => {
+					document.body.classList.remove('wish-intro-active');
+					intro.remove();
+				}, 1200);
+			};
+
+			if (reducedMotion) {
+				count.textContent = String(target);
+				chart.style.setProperty('--progress', '360deg');
+				message.classList.add('is-playing');
+				window.setTimeout(finish, 1800);
+				return;
+			}
+
+			const addNumberSparkle = (now) => {
+				if (now - lastNumberSparkAt < 90 || activeNumberSparkles.size >= 8) return;
+				lastNumberSparkAt = now;
+
+				const sparkle = document.createElement('span');
+				sparkle.className = 'wish-collection-number-sparkle';
+				sparkle.setAttribute('aria-hidden', 'true');
+				sparkle.textContent = Math.random() > 0.5 ? '✦' : '✧';
+				sparkle.style.setProperty('--spark-x', `${Math.random() * 150 - 75}px`);
+				sparkle.style.setProperty('--spark-y', `${Math.random() * 54 - 27}px`);
+				sparkle.style.setProperty('--spark-dx', `${Math.random() * 44 - 22}px`);
+				sparkle.style.setProperty('--spark-dy', `${-18 - Math.random() * 26}px`);
+				chartInner.appendChild(sparkle);
+				activeNumberSparkles.add(sparkle);
+				sparkle.addEventListener('animationend', () => {
+					activeNumberSparkles.delete(sparkle);
+					sparkle.remove();
+				}, { once: true });
+			};
+
+			window.setTimeout(() => {
+				const startedAt = performance.now();
+				const duration = 3200;
+				chart.classList.add('is-counting');
+
+				const animateCount = (now) => {
+					const progress = Math.min((now - startedAt) / duration, 1);
+					const eased = progress < 0.5
+						? 4 * progress * progress * progress
+						: 1 - Math.pow(-2 * progress + 2, 3) / 2;
+					const current = Math.round(target * eased);
+					if (count.textContent !== String(current)) {
+						count.textContent = String(current);
+						addNumberSparkle(now);
+					}
+					chart.style.setProperty('--progress', `${360 * eased}deg`);
+					sparkles.forEach((sparkle, index) => {
+						sparkle.style.setProperty('--spark-angle', `${-90 + eased * 360 - index * 12}deg`);
+						if (eased * 360 < index * 12) {
+							sparkle.style.opacity = '0';
+						} else {
+							sparkle.style.removeProperty('opacity');
+						}
+					});
+
+					if (progress < 1) {
+						requestAnimationFrame(animateCount);
+					} else {
+						window.setTimeout(() => chart.classList.remove('is-counting'), 750);
+						message.classList.add('is-playing');
+					}
+				};
+
+				requestAnimationFrame(animateCount);
+			}, 700);
+
+			window.setTimeout(finish, 5600);
+		})();
+	</script>
 
 	<script>
 		// タグを追加・変更するときは、下の wishMetadata を編集してください。
@@ -372,6 +517,12 @@
 		const tagSearch = document.getElementById('tag-search');
 		const filterSummary = document.getElementById('filter-summary');
 		const duplicateTags = document.getElementById('duplicate-tags');
+		const wishSky = document.getElementById('wish-sky');
+		const wishSkyViewport = document.getElementById('wish-sky-viewport');
+		const wishSkyMap = document.getElementById('wish-sky-map');
+		const wishSkyCenterButton = document.getElementById('wish-sky-center');
+		const listViewButton = document.getElementById('wish-list-view-button');
+		const skyViewButton = document.getElementById('wish-sky-view-button');
 		let activeCategory = 'すべて';
 		const returnWishId = sessionStorage.getItem('wishListReturnId');
 		const returnCardTop = Number(sessionStorage.getItem('wishListReturnCardTop'));
@@ -381,6 +532,9 @@
 		const returnAge = sessionStorage.getItem('wishListReturnAge');
 		const returnGender = sessionStorage.getItem('wishListReturnGender');
 		const returnTagQuery = sessionStorage.getItem('wishListReturnTagQuery');
+		const returnView = sessionStorage.getItem('wishListReturnView');
+		const returnSkyLeft = Number(sessionStorage.getItem('wishListReturnSkyLeft'));
+		const returnSkyTop = Number(sessionStorage.getItem('wishListReturnSkyTop'));
 
 		if (returnWishId) {
 			[
@@ -391,8 +545,54 @@
 				'wishListReturnZodiac',
 				'wishListReturnAge',
 				'wishListReturnGender',
-				'wishListReturnTagQuery'
+				'wishListReturnTagQuery',
+				'wishListReturnView',
+				'wishListReturnSkyLeft',
+				'wishListReturnSkyTop'
 			].forEach((key) => sessionStorage.removeItem(key));
+		}
+
+		let hasCenteredSky = false;
+
+		function centerSkyMap() {
+			const x = Number(wishSkyMap.dataset.focusX) || wishSkyMap.clientWidth / 2;
+			const y = Number(wishSkyMap.dataset.focusY) || wishSkyMap.clientHeight / 2;
+			wishSkyViewport.scrollLeft = Math.max(0, x - wishSkyViewport.clientWidth / 2);
+			wishSkyViewport.scrollTop = Math.max(0, y - wishSkyViewport.clientHeight / 2);
+		}
+
+		function setView(view) {
+			const showSky = view === 'sky';
+			wishList.hidden = showSky;
+			wishSky.hidden = !showSky;
+			listViewButton.classList.toggle('is-active', !showSky);
+			listViewButton.setAttribute('aria-pressed', String(!showSky));
+			skyViewButton.classList.toggle('is-active', showSky);
+			skyViewButton.setAttribute('aria-pressed', String(showSky));
+			if (showSky && !hasCenteredSky) {
+				hasCenteredSky = true;
+				requestAnimationFrame(centerSkyMap);
+			}
+		}
+
+		function rememberWishListReturn(item, link) {
+			localStorage.setItem(`wishViewed:${item.id}`, 'true');
+			link.classList.add('is-viewed');
+			sessionStorage.setItem('wishListReturnId', item.id);
+			sessionStorage.setItem('wishListReturnCardTop', String(link.getBoundingClientRect().top));
+			sessionStorage.setItem('wishListReturnScrollY', String(window.scrollY));
+			sessionStorage.setItem('wishListReturnCategory', activeCategory);
+			sessionStorage.setItem('wishListReturnZodiac', zodiacFilter.value);
+			sessionStorage.setItem('wishListReturnAge', ageFilter.value);
+			sessionStorage.setItem('wishListReturnGender', genderFilter.value);
+			sessionStorage.setItem('wishListReturnTagQuery', tagSearch.value);
+			sessionStorage.setItem('wishListReturnView', viewIsSky() ? 'sky' : 'list');
+			sessionStorage.setItem('wishListReturnSkyLeft', String(wishSkyViewport.scrollLeft));
+			sessionStorage.setItem('wishListReturnSkyTop', String(wishSkyViewport.scrollTop));
+		}
+
+		function viewIsSky() {
+			return !wishSky.hidden;
 		}
 
 		function populateSelect(select, key, label) {
@@ -453,6 +653,7 @@
 		}
 
 		function renderList() {
+			const recenterSky = !wishSky.hidden;
 			const query = tagSearch.value.trim().toLocaleLowerCase();
 			const filtered = visibleWishData.filter((item) => {
 				const matchesCategory = activeCategory === 'すべて' || item.category === activeCategory;
@@ -472,14 +673,7 @@
 				card.className = `wish-card wish-card--${item.categoryColor}`;
 				card.dataset.wishId = item.id;
 				card.addEventListener('click', () => {
-					sessionStorage.setItem('wishListReturnId', item.id);
-					sessionStorage.setItem('wishListReturnCardTop', String(card.getBoundingClientRect().top));
-					sessionStorage.setItem('wishListReturnScrollY', String(window.scrollY));
-					sessionStorage.setItem('wishListReturnCategory', activeCategory);
-					sessionStorage.setItem('wishListReturnZodiac', zodiacFilter.value);
-					sessionStorage.setItem('wishListReturnAge', ageFilter.value);
-					sessionStorage.setItem('wishListReturnGender', genderFilter.value);
-					sessionStorage.setItem('wishListReturnTagQuery', tagSearch.value);
+					rememberWishListReturn(item, card);
 				});
 
 				if (item.image) {
@@ -514,6 +708,176 @@
 				card.appendChild(body);
 				wishList.appendChild(card);
 			});
+
+			renderSky(filtered);
+			hasCenteredSky = false;
+			if (recenterSky) {
+				hasCenteredSky = true;
+				requestAnimationFrame(centerSkyMap);
+			}
+		}
+
+		function renderSky(items) {
+			wishSkyMap.replaceChildren();
+			const mapWidth = 3600;
+			const mapHeight = 2400;
+			wishSkyMap.style.width = `${mapWidth}px`;
+			wishSkyMap.style.height = `${mapHeight}px`;
+
+			let backgroundSeed = 19840707;
+			const backgroundRandom = () => {
+				backgroundSeed = (Math.imul(backgroundSeed, 1664525) + 1013904223) >>> 0;
+				return backgroundSeed / 4294967296;
+			};
+			const distantStars = document.createElement('div');
+			distantStars.className = 'wish-sky-distant-stars';
+			distantStars.setAttribute('aria-hidden', 'true');
+			for (let index = 0; index < 280; index++) {
+				const distantStar = document.createElement('span');
+				distantStar.className = 'wish-sky-distant-star';
+				distantStar.style.left = `${backgroundRandom() * 100}%`;
+				distantStar.style.top = `${backgroundRandom() * 100}%`;
+				distantStar.style.setProperty('--distant-star-size', `${0.8 + backgroundRandom() * 1.6}px`);
+				distantStar.style.setProperty('--distant-star-opacity', `${0.2 + backgroundRandom() * 0.6}`);
+				distantStars.appendChild(distantStar);
+			}
+			wishSkyMap.appendChild(distantStars);
+			wishSkyMap.dataset.focusX = `${mapWidth / 2}`;
+			wishSkyMap.dataset.focusY = `${mapHeight / 2}`;
+			if (!items.length) {
+				const emptyMessage = document.createElement('p');
+				emptyMessage.className = 'wish-sky-cluster-placeholder';
+				emptyMessage.textContent = '条件に一致する短冊がありません';
+				wishSkyMap.appendChild(emptyMessage);
+				return;
+			}
+
+			const tagCounts = new Map();
+			items.forEach((item) => {
+				[...new Set(item.tags)]
+					.filter((tag) => !categoryNames.includes(tag) && tag !== '未分類')
+					.forEach((tag) => tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1));
+			});
+
+			const groups = new Map();
+			items.forEach((item) => {
+				const sharedTags = [...new Set(item.tags)]
+					.filter((tag) => !categoryNames.includes(tag) && tag !== '未分類' && tagCounts.get(tag) > 1)
+					.sort((first, second) => tagCounts.get(second) - tagCounts.get(first));
+				const groupTag = sharedTags[0] || item.category;
+				if (!groups.has(groupTag)) groups.set(groupTag, []);
+				groups.get(groupTag).push(item);
+			});
+
+			const orderedGroups = [...groups.entries()]
+				.sort(([firstTag, firstItems], [secondTag, secondItems]) =>
+					secondItems.length - firstItems.length || firstTag.localeCompare(secondTag, 'ja')
+				);
+
+			const placements = [];
+			orderedGroups.forEach(([tag, groupItems], index) => {
+				let seed = [...tag].reduce((value, character) => (Math.imul(value, 31) + character.charCodeAt(0)) >>> 0, 2166136261);
+				const random = () => {
+					seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+					return seed / 4294967296;
+				};
+				const radius = 110 + Math.sqrt(groupItems.length) * 18;
+				let placement = null;
+				let bestScore = -Infinity;
+
+				for (let attempt = 0; attempt < 240; attempt++) {
+					const x = radius + 130 + random() * (mapWidth - radius * 2 - 260);
+					const y = radius + 130 + random() * (mapHeight - radius * 2 - 260);
+					const score = placements.length
+						? Math.min(...placements.map((other) => Math.hypot(x - other.x, y - other.y) - radius - other.radius - 130))
+						: Infinity;
+					if (score > bestScore) {
+						bestScore = score;
+						placement = { x, y, radius, random };
+					}
+					if (score >= 0) break;
+				}
+
+				placements.push({ ...placement, tag });
+				if (index === 0) {
+					wishSkyMap.dataset.focusX = `${placement.x}`;
+					wishSkyMap.dataset.focusY = `${placement.y}`;
+				}
+			});
+
+			orderedGroups.forEach(([tag, groupItems], groupIndex) => {
+					const placement = placements[groupIndex];
+					const random = placement.random;
+					const starPositions = [];
+					groupItems.forEach(() => {
+						let position = null;
+						let bestClearance = -Infinity;
+						for (let attempt = 0; attempt < 120; attempt++) {
+							const angle = random() * Math.PI * 2;
+							const distance = placement.radius * Math.sqrt(random()) * 0.94;
+							const candidate = {
+								x: placement.radius + Math.cos(angle) * distance,
+								y: placement.radius + Math.sin(angle) * distance
+							};
+							const clearance = starPositions.length
+								? Math.min(...starPositions.map((other) => Math.hypot(candidate.x - other.x, candidate.y - other.y) - 30))
+								: Infinity;
+							if (clearance > bestClearance) {
+								bestClearance = clearance;
+								position = candidate;
+							}
+							if (clearance >= 0) break;
+						}
+						starPositions.push(position);
+					});
+					const cluster = document.createElement('section');
+					cluster.className = 'wish-sky-cluster';
+					cluster.setAttribute('aria-label', `タグ ${tag} の願い事 ${groupItems.length}件`);
+					cluster.style.left = `${placement.x}px`;
+					cluster.style.top = `${placement.y}px`;
+					cluster.style.width = `${placement.radius * 2}px`;
+					cluster.style.height = `${placement.radius * 2}px`;
+					cluster.style.setProperty('--cluster-radius', `${placement.radius}px`);
+
+					const categoryCounts = new Map();
+					groupItems.forEach((item) => categoryCounts.set(item.categoryColor, (categoryCounts.get(item.categoryColor) || 0) + 1));
+					const dominantColor = [...categoryCounts.entries()].sort((first, second) => second[1] - first[1])[0][0];
+					cluster.classList.add(`wish-card--${dominantColor}`);
+
+					const density = Math.min(1, groupItems.length / 28);
+					cluster.style.setProperty('--cluster-glow-alpha', `${0.06 + density * 0.18}`);
+					const label = document.createElement('h3');
+					label.className = 'wish-sky-cluster-label';
+					label.textContent = `${tag} · ${groupItems.length}件`;
+					cluster.appendChild(label);
+
+					groupItems.forEach((item, index) => {
+						const star = document.createElement('a');
+						const position = starPositions[index];
+						star.className = 'wish-sky-star';
+						star.href = item.url;
+						star.dataset.wishId = item.id;
+						const isViewed = localStorage.getItem(`wishViewed:${item.id}`) === 'true';
+						star.classList.toggle('is-viewed', isViewed);
+						star.style.left = `${position.x}px`;
+						star.style.top = `${position.y}px`;
+						star.style.setProperty('--star-brightness', `${0.68 + density * 0.32}`);
+						star.style.setProperty('--star-size', `${0.55 + random() * 0.42}rem`);
+						star.style.setProperty('--star-delay', `${random() * -2.8}s`);
+						star.setAttribute('aria-label', `${item.title}（${tag}）の短冊を見る${isViewed ? '・閲覧済み' : ''}`);
+						star.title = `${item.title} · ${tag}${isViewed ? ' · 閲覧済み' : ''}`;
+						star.addEventListener('click', () => rememberWishListReturn(item, star));
+
+						const point = document.createElement('span');
+						point.className = 'wish-sky-star-point';
+						point.setAttribute('aria-hidden', 'true');
+						point.textContent = '✦';
+						star.appendChild(point);
+						cluster.appendChild(star);
+					});
+
+					wishSkyMap.appendChild(cluster);
+				});
 		}
 
 		populateSelect(zodiacFilter, 'zodiac', '星座');
@@ -528,14 +892,52 @@
 		if (returnTagQuery) tagSearch.value = returnTagQuery;
 		[zodiacFilter, ageFilter, genderFilter].forEach((select) => select.addEventListener('change', renderList));
 		tagSearch.addEventListener('input', renderList);
+		listViewButton.addEventListener('click', () => setView('list'));
+		skyViewButton.addEventListener('click', () => setView('sky'));
+		wishSkyCenterButton.addEventListener('click', centerSkyMap);
+		let activePointer = null;
+		let dragStart = null;
+		wishSkyViewport.addEventListener('pointerdown', (event) => {
+			if (event.pointerType !== 'mouse' || event.button !== 0 || event.target.closest('a, button')) return;
+			activePointer = event.pointerId;
+			dragStart = {
+				x: event.clientX,
+				y: event.clientY,
+				left: wishSkyViewport.scrollLeft,
+				top: wishSkyViewport.scrollTop
+			};
+			wishSkyViewport.classList.add('is-dragging');
+			wishSkyViewport.setPointerCapture(event.pointerId);
+		});
+		wishSkyViewport.addEventListener('pointermove', (event) => {
+			if (event.pointerId !== activePointer || !dragStart) return;
+			wishSkyViewport.scrollLeft = dragStart.left - (event.clientX - dragStart.x);
+			wishSkyViewport.scrollTop = dragStart.top - (event.clientY - dragStart.y);
+		});
+		const stopSkyDrag = (event) => {
+			if (event.pointerId !== activePointer) return;
+			activePointer = null;
+			dragStart = null;
+			wishSkyViewport.classList.remove('is-dragging');
+		};
+		wishSkyViewport.addEventListener('pointerup', stopSkyDrag);
+		wishSkyViewport.addEventListener('pointercancel', stopSkyDrag);
 		renderFilters();
 		renderDuplicateTags();
 		renderList();
+		setView(returnWishId && returnView === 'sky' ? 'sky' : 'list');
 		if (returnWishId) {
 			requestAnimationFrame(() => {
-				const card = [...wishList.children].find((item) => item.dataset.wishId === returnWishId);
-				if (card && Number.isFinite(returnCardTop)) {
-					window.scrollTo(0, Math.max(0, window.scrollY + card.getBoundingClientRect().top - returnCardTop));
+				if (returnView === 'sky') {
+					wishSkyViewport.scrollLeft = returnSkyLeft;
+					wishSkyViewport.scrollTop = returnSkyTop;
+					if (Number.isFinite(returnScrollY)) window.scrollTo(0, Math.max(0, returnScrollY));
+					return;
+				}
+				const returnContainer = returnView === 'sky' ? wishSky : wishList;
+				const wishLink = [...returnContainer.querySelectorAll('[data-wish-id]')].find((item) => item.dataset.wishId === returnWishId);
+				if (wishLink && Number.isFinite(returnCardTop)) {
+					window.scrollTo(0, Math.max(0, window.scrollY + wishLink.getBoundingClientRect().top - returnCardTop));
 				} else if (Number.isFinite(returnScrollY)) {
 					window.scrollTo(0, Math.max(0, returnScrollY));
 				}
